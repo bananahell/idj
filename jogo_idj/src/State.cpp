@@ -26,7 +26,7 @@ void State::LoadAssets() {
   State::bg.Open("assets/img/ocean.jpg");
 
   /* Music assets. */
-  State::music.Open("assets/music/stageState.ogg");
+  State::music.Open("assets/audio/stageState.ogg");
   State::music.Play();
 
 }

@@ -1,6 +1,6 @@
 /**
  * @file State.h
- * 
+ *
  * State's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032

@@ -28,7 +28,9 @@ Sprite::Sprite(std::string file) {
 
 Sprite::~Sprite() {
 
-  SDL_DestroyTexture(Sprite::texture);
+  if (Sprite::texture != nullptr) {
+    SDL_DestroyTexture(Sprite::texture);
+  }
 
 }
 
