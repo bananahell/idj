@@ -1,5 +1,5 @@
 /**
- * @file State.h
+ * @file Face.h
  *
  * State's functions' declarations.
  *
@@ -9,12 +9,14 @@
 #ifndef FACE_H
 #define FACE_H
 
+#include "Component.h"
+
 
 /**
  * State class. The class in which the game manifests its current behavior, like
  which music it's playing or if it wants to quit.
  */
-class Face {
+class Face : public Component {
 
  public:
 
@@ -34,7 +36,7 @@ class Face {
    */
   void Update(float dt);
   void Render();
-  void Is(std::string type);
+  bool Is(std::string type);
 
  private:
 

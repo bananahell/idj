@@ -1,14 +1,26 @@
 /**
- * @file State.h
+ * @file GameObject.h
  *
  * State's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
 
+/* Com isso, tá dando erro de compilação, sem isso, o problema saiu
+mas tirar isso de GameObject.h e Component.h dá ruinzão
+Dependência circular? como faz isso?
+não esquecer de descomentar o endif no final vvvvv
+*/
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include "Rect.h"
+
+#include <string>
+#include <vector>
+
+
+class Component;
 
 /**
  * State class. The class in which the game manifests its current behavior, like

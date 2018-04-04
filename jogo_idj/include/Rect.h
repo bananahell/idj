@@ -1,5 +1,5 @@
 /**
- * @file State.h
+ * @file Rect.h
  *
  * State's functions' declarations.
  *

@@ -1,5 +1,5 @@
 /**
- * @file State.h
+ * @file Sound.h
  *
  * State's functions' declarations.
  *
@@ -9,12 +9,17 @@
 #ifndef SOUND_H
 #define SOUND_H
 
+#define INCLUDE_SDL_MIXER
+#include "SDL_include.h"
+
+#include "Component.h"
+
 
 /**
  * State class. The class in which the game manifests its current behavior, like
  which music it's playing or if it wants to quit.
  */
-class Sound {
+class Sound : public Component {
 
  public:
 
@@ -46,7 +51,7 @@ class Sound {
   bool IsOpen();
   void Update(float dt);
   void Render();
-  void Is(std::string type);
+  bool Is(std::string type);
 
  private:
 

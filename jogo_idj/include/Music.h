@@ -1,6 +1,6 @@
 /**
  * @file Music.h
- * 
+ *
  * Music's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -9,6 +9,7 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
+#define INCLUDE_SDL
 #define INCLUDE_SDL_MIXER
 #include "SDL_include.h"
 

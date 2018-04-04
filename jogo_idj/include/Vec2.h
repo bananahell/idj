@@ -1,5 +1,5 @@
 /**
- * @file State.h
+ * @file Vec2.h
  *
  * State's functions' declarations.
  *
