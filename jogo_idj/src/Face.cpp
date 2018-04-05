@@ -8,6 +8,8 @@
 
 #include "Face.h"
 
+#include "Sound.h"
+
 
 Face::Face(GameObject& associated) : Component(associated) {
 
@@ -26,6 +28,9 @@ ou igual a zero, chame o RequestDelete do GO que o contém (associated),
 e dê play no componente Sound de seu associated, se houver um.
 */
     // GameObject::RequestDelete(); // TODO ????
+    Face::associated.RequestDelete();
+    Sound* sound = (Sound*)Face::associated.GetComponent("Sound");
+    sound->Play();
 
   }
 
@@ -39,12 +44,15 @@ void Face::Update(float dt) {
 
 void Face::Render() {
 
-  // TODO int Mix_HaltChannel(int channel) ???
+
 
 }
 
 bool Face::Is(std::string type) {
 
-  // TODO Mix_Chunk* Mix_LoadWAV(char* file = file.c_str())
+  if (type.compare("Face") == 0) {
+    return true;
+  }
+  return false;
 
 }

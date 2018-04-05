@@ -89,6 +89,12 @@ void GameObject::RemoveComponent(Component* cpt) {
 
 Component* GameObject::GetComponent(std::string type) {
 
+  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+    if (GameObject::components.at(i)->Is(type)) {
+      return GameObject::components.at(i);
+    }
+  }
+  return nullptr;
   // TODO wut
 
 }

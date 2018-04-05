@@ -11,37 +11,53 @@
 
 Sound::Sound(GameObject& associated) : Component(associated) {
 
-  // TODO Atribui o associated ao atributo de mesmo nome e atribui nullptr a chunk.?????????
+  Sound::chunk = nullptr;
 
 }
 
-Sound::Sound(GameObject& associated, std::string file) : Component(associated) {
+Sound::Sound(GameObject& associated, std::string file) : Sound(associated) {
 
-  // Sound::Sound(associated); // TODO ??
+  Sound::Open(file);
 
 }
 
 void Sound::Play(int times) {
 
-  // TODO int Mix_PlayChannel(int channel = -1, Mix_Chunk* chunk, int loops = times - 1)
+  Sound::channel = Mix_PlayChannel(-1, Sound::chunk, times - 1);
+  if (Sound::channel == -1) {
+    SDL_Log("Unable to play sound Mix_PlayChannel: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
 }
 
 void Sound::Stop() {
 
-  // TODO int Mix_HaltChannel(int channel) ???
+  if (Sound::chunk != nullptr) {
+    if (Mix_HaltChannel(Sound::channel) != 0) {
+      SDL_Log("HOW DID THIS BREAK?? Mix_HaltChannel: %s", SDL_GetError());
+      exit(EXIT_FAILURE);
+    }
+  }
 
 }
 
 void Sound::Open(std::string file) {
 
-  // TODO Mix_Chunk* Mix_LoadWAV(char* file = file.c_str())
+  Sound::chunk = Mix_LoadWAV(file.c_str());
+  if (Sound::chunk == nullptr) {
+    SDL_Log("Unable to open sound Mix_LoadWAV: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
 }
 
 Sound::~Sound() {
 
-  // TODO void Mix_FreeChunk(Mix_Chunk* chunk)
+  if (Sound::chunk != nullptr) {
+    Sound::Stop();
+  }
+  Mix_FreeChunk(Sound::chunk);
 
 }
 
@@ -59,6 +75,9 @@ void Sound::Render() {
 
 bool Sound::Is(std::string type) {
 
-// TODO ??
+  if (type.compare("Sound") == 0) {
+    return true;
+  }
+  return false;
 
 }

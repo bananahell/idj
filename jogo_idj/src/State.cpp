@@ -1,6 +1,6 @@
 /**
  * @file State.cpp
- * 
+ *
  * Game's logic coordinator.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -14,7 +14,7 @@
 #include "Game.h"
 
 
-State::State() : bg(Sprite()), music(Music()){
+State::State() : bg(Sprite()), music(Music()) {
 
   State::quitRequested = false;
 
