@@ -19,9 +19,6 @@ GameObject::GameObject() : box(Rect()){
 
 GameObject::~GameObject() {
 
-  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
-    delete GameObject::components.at(i);
-  } // TODO lembrar que só tira isso se eu usar unique_ptr direito
   GameObject::components.clear();
 
 }
@@ -36,7 +33,7 @@ void GameObject::Update(float dt) {
 
 void GameObject::Render() {
 
-  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
+  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
     GameObject::components.at(i)->Render();
   }
 
@@ -67,8 +64,7 @@ void GameObject::RemoveComponent(Component* cpt) {
   while (position != GameObject::components.size()) {
     // TODO tá certo comparar dois ponteiros assim?
     // PRINCIPALMENTE PARA UNIQUE_PTR
-    if (GameObject::components.at(position) == cpt) { /* .get() */
-      delete GameObject::components.at(position);
+    if (GameObject::components.at(position).get() == cpt) {
       GameObject::components.erase(GameObject::components.begin() + position);
       notHere = false;
       break;
@@ -85,7 +81,7 @@ Component* GameObject::GetComponent(std::string type) {
 
   for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     if (GameObject::components.at(i)->Is(type)) {
-      return GameObject::components.at(i); /* .get() */
+      return GameObject::components.at(i).get(); /* .get() */
     }
   }
   return nullptr;

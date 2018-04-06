@@ -37,6 +37,7 @@ class Face : public Component {
   void Update(float dt);
   void Render();
   bool Is(std::string type);
+  bool IsDead();
 
   /**
    * State's background music.

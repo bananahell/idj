@@ -8,8 +8,6 @@
 
 #include "Rect.h"
 
-#include <cstdio>
-
 
 Rect::Rect() {
 
@@ -30,15 +28,12 @@ Rect::Rect(float w, float h) {
 }
 
 bool Rect::Contains(float mouseX, float mouseY) {
-printf("x = %f, y = %f, w = %f, h = %f\nmouseX = %f, mouseY = %f\n", x, y, w, h, mouseX, mouseY);
   if (mouseX >= Rect::x &&
       mouseY >= Rect::y &&
       mouseX <= Rect::x + Rect::w &&
       mouseY <= Rect::y + Rect::h) {
-        printf("true!!!\n\n");
         return true;
       }
-        printf("false!!!\n\n");
   return false;
 
 }

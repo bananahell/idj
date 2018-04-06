@@ -20,16 +20,7 @@ class Vec2 {
 
   Vec2(float x1, float y1);
 
-  void GetRandWithDistance(int distance);
-  float GetDX(float x);
-  float GetDY(float y);
-  float GetDS(Vec2 pos);
-  Vec2 operator+(const Vec2& rhs) const;
-  Vec2 operator-(const Vec2& rhs) const;
-  Vec2 operator*(const float rhs) const;
-  float Cos(float ang);
-  float Sin(float ang);
-  Vec2 Project(float dist, float ang);
+  void GetRandWithDistance(float distance);
 
   /**
    * Access to the private member quitRequested.

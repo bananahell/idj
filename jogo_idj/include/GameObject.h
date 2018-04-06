@@ -62,7 +62,7 @@ class GameObject {
   /**
    * State's background image/texture.
    */ // TODO UNIQUE POINTER DOS INFERNO
-  std::vector<Component*> components;
+  std::vector<std::unique_ptr<Component>> components;
   /**
    * State's background music.
    */

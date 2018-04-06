@@ -23,7 +23,7 @@ Sound::Sound(GameObject& associated, std::string file) : Sound(associated) {
 }
 
 void Sound::Play(int times) {
-
+printf("Sound::Play\n");
   Sound::channel = Mix_PlayChannel(-1, Sound::chunk, times - 1);
   if (Sound::channel == -1) {
     SDL_Log("Unable to play sound Mix_PlayChannel: %s", SDL_GetError());
@@ -44,7 +44,7 @@ void Sound::Stop() {
 }
 
 void Sound::Open(std::string file) {
-
+printf("Sound::Open\n");
   Sound::chunk = Mix_LoadWAV(file.c_str());
   if (Sound::chunk == nullptr) {
     SDL_Log("Unable to open sound Mix_LoadWAV: %s", SDL_GetError());
@@ -62,6 +62,11 @@ Sound::~Sound() {
 
 void Sound::Update(float dt) {
 
+}
+
+bool Sound::GetIsPlaying() {
+
+  return Mix_Playing(Sound::channel) > 0;
 
 }
 
