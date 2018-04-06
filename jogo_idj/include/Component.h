@@ -6,11 +6,6 @@
  * @author Pedro Nogueira - 14/0065032
  */
 
-/* Com isso, tá dando erro de compilação, sem isso, o problema saiu
-mas tirar isso de GameObject.h e Component.h dá ruinzão
-Dependência circular? como faz isso?
-não esquecer de descomentar o endif no final vvvvv
-*/
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
@@ -30,7 +25,7 @@ class Component {
   /**
    * State's constructor. Sets its content, like background image and music.
    */
-  Component(GameObject& associated);
+  explicit Component(GameObject& associated);
   /**
    * State's constructor. Sets its content, like background image and music.
    */
@@ -60,4 +55,4 @@ class Component {
   GameObject& associated;
 
 };
-#endif /* STATE_H */
+#endif /* COMPONENT_H */

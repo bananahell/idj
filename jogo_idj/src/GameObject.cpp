@@ -11,7 +11,7 @@
 #include "Component.h"
 
 
-GameObject::GameObject() {
+GameObject::GameObject() : box(Rect()){
 
   GameObject::isDead = false;
 
@@ -19,23 +19,16 @@ GameObject::GameObject() {
 
 GameObject::~GameObject() {
 
-/* TODO Sugestão melhor? Acho que não.... mais coisa pra fazer em loop
-  int lastComponent = GameObject::components.size() - 1;
-  while (GameObject::components.size() != 0) {
-    delete GameObject::components.at(lastComponent);
-    GameObject::components.pop_back();
-  }
-*/
   for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     delete GameObject::components.at(i);
-  }
+  } // TODO lembrar que só tira isso se eu usar unique_ptr direito
   GameObject::components.clear();
 
 }
 
 void GameObject::Update(float dt) {
 
-  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     GameObject::components.at(i)->Update(dt);
   }
 
@@ -43,7 +36,7 @@ void GameObject::Update(float dt) {
 
 void GameObject::Render() {
 
-  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     GameObject::components.at(i)->Render();
   }
 
@@ -63,7 +56,7 @@ void GameObject::RequestDelete() {
 
 void GameObject::AddComponent(Component* cpt) {
 
-  GameObject::components.push_back(cpt);
+  GameObject::components.emplace_back(cpt);
 
 }
 
@@ -73,7 +66,8 @@ void GameObject::RemoveComponent(Component* cpt) {
   bool notHere = true;
   while (position != GameObject::components.size()) {
     // TODO tá certo comparar dois ponteiros assim?
-    if (GameObject::components.at(position) == cpt) {
+    // PRINCIPALMENTE PARA UNIQUE_PTR
+    if (GameObject::components.at(position) == cpt) { /* .get() */
       delete GameObject::components.at(position);
       GameObject::components.erase(GameObject::components.begin() + position);
       notHere = false;
@@ -89,12 +83,11 @@ void GameObject::RemoveComponent(Component* cpt) {
 
 Component* GameObject::GetComponent(std::string type) {
 
-  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     if (GameObject::components.at(i)->Is(type)) {
-      return GameObject::components.at(i);
+      return GameObject::components.at(i); /* .get() */
     }
   }
   return nullptr;
-  // TODO wut
 
 }

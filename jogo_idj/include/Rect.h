@@ -18,6 +18,9 @@ class Rect {
 
  public:
 
+  Rect();
+  Rect(float w, float h);
+
   /**
    * Access to the private member quitRequested.
    *
@@ -39,4 +42,4 @@ class Rect {
   float h;
 
 };
-#endif /* STATE_H */
+#endif /* RECT_H */

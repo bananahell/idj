@@ -12,6 +12,7 @@
 Sound::Sound(GameObject& associated) : Component(associated) {
 
   Sound::chunk = nullptr;
+  Sound::channel = -1;
 
 }
 
@@ -54,22 +55,18 @@ void Sound::Open(std::string file) {
 
 Sound::~Sound() {
 
-  if (Sound::chunk != nullptr) {
-    Sound::Stop();
-  }
+  Sound::Stop();
   Mix_FreeChunk(Sound::chunk);
 
 }
 
 void Sound::Update(float dt) {
 
-// TODO ??
 
 }
 
 void Sound::Render() {
 
-// TODO ??
 
 }
 

@@ -23,7 +23,7 @@ class Face : public Component {
   /**
    * State's constructor. Sets its content, like background image and music.
    */
-  Face(GameObject& associated);
+  explicit Face(GameObject& associated);
 
   /**
    * Access to the private member quitRequested.
@@ -46,4 +46,4 @@ class Face : public Component {
   int hitpoints;
 
 };
-#endif /* STATE_H */
+#endif /* FACE_H */

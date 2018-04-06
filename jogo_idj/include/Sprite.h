@@ -1,6 +1,6 @@
 /**
  * @file Sprite.h
- * 
+ *
  * Sprite's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -12,13 +12,15 @@
 #define INCLUDE_SDL_IMAGE
 #include "SDL_include.h"
 
+#include "Component.h"
+
 #include <string>
 
 
 /**
  * Sprite class. The class responsible for the game's textures and images.
  */
-class Sprite {
+class Sprite : public Component {
 
  private:
 
@@ -44,13 +46,13 @@ class Sprite {
   /**
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
-  Sprite();
+  Sprite(GameObject& associated);
   /**
    * Sprite's constructor with a texture. Opens the texture already.
    *
    * @param file Texture's directory and name to be rendered.
    */
-  explicit Sprite(std::string file);
+  explicit Sprite(GameObject& associated, std::string file);
   /**
    * Sprite's destructor.
    */
@@ -73,13 +75,6 @@ class Sprite {
    */
   void SetClip(int x, int y, int w, int h);
   /**
-   * Takes the texture to be rendered to State's Render function.
-   *
-   * @param x Top left horizontal position in the Game's renderer.
-   * @param y Top left vertical position in the Game's renderer.
-   */
-  void Render(int x, int y);
-  /**
    * Access to the private member width.
    *
    * @return Sprite's width.
@@ -97,6 +92,12 @@ class Sprite {
    * @return False if null.
    */
   bool IsOpen();
+  void Update(float dt);
+  /**
+   * Takes the texture to be rendered to State's Render function.
+   */
+  void Render();
+  bool Is(std::string type);
 
 };
 #endif /* SPRITE_H */

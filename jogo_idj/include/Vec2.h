@@ -18,6 +18,19 @@ class Vec2 {
 
  public:
 
+  Vec2(float x1, float y1);
+
+  void GetRandWithDistance(int distance);
+  float GetDX(float x);
+  float GetDY(float y);
+  float GetDS(Vec2 pos);
+  Vec2 operator+(const Vec2& rhs) const;
+  Vec2 operator-(const Vec2& rhs) const;
+  Vec2 operator*(const float rhs) const;
+  float Cos(float ang);
+  float Sin(float ang);
+  Vec2 Project(float dist, float ang);
+
   /**
    * Access to the private member quitRequested.
    *
@@ -28,6 +41,7 @@ class Vec2 {
    * Function that holds the assets used in the State to be pre-loaded.
    */
   float y;
+  const double PI = 3.141592653589793;
 
 };
-#endif /* STATE_H */
+#endif /* VEC2_H */

@@ -27,7 +27,7 @@ class Sound : public Component {
   /**
    * State's constructor. Sets its content, like background image and music.
    */
-  Sound(GameObject& associated);
+  explicit Sound(GameObject& associated);
   Sound(GameObject& associated, std::string file);
   ~Sound();
 
@@ -66,4 +66,4 @@ class Sound : public Component {
   int channel;
 
 };
-#endif /* STATE_H */
+#endif /* SOUND_H */

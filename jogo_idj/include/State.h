@@ -11,6 +11,10 @@
 
 #include "Sprite.h"
 #include "Music.h"
+#include "GameObject.h"
+
+#include <memory>
+#include <vector>
 
 
 /**
@@ -21,10 +25,9 @@ class State {
 
  private:
 
-  /**
-   * State's background image/texture.
-   */
-  Sprite bg;
+  void Input();
+  void AddObject(int mouseX, int mouseY);
+
   /**
    * State's background music.
    */
@@ -33,6 +36,7 @@ class State {
    * State's need to quit the game.
    */
   bool quitRequested;
+  std::vector<std::unique_ptr<GameObject>> objectArray;
 
  public:
 
@@ -40,6 +44,7 @@ class State {
    * State's constructor. Sets its content, like background image and music.
    */
   State();
+  ~State();
 
   /**
    * Access to the private member quitRequested.

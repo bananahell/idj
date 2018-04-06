@@ -1,6 +1,6 @@
 /**
  * @file Sprite.cpp
- * 
+ *
  * Game's images and sprites manager.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -11,7 +11,7 @@
 #include "Game.h"
 
 
-Sprite::Sprite() {
+Sprite::Sprite(GameObject& associated) : Component(associated) {
 
   Sprite::texture = nullptr;
   Sprite::width = 0;
@@ -19,10 +19,16 @@ Sprite::Sprite() {
 
 }
 
-Sprite::Sprite(std::string file) {
+Sprite::Sprite(GameObject& associated, std::string file)
+              : Component(associated) {
 
   Sprite::texture = nullptr;
   Sprite::Open(file);
+
+  Sprite::associated.box.w = Sprite::width;
+  Sprite::associated.box.h = Sprite::height;
+  printf("width = (box) %d - (Sprite) %d\n", (int)associated.box.w, Sprite::width);
+  printf("height = (box) %d - (Sprite) %d\n", (int)associated.box.h, Sprite::height);
 
 }
 
@@ -40,7 +46,6 @@ void Sprite::Open(std::string file) {
   if (Sprite::texture != nullptr) {
     SDL_DestroyTexture(Sprite::texture);
   }
-
   /* Loads texture. */
   Sprite::texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(),
                                     file.c_str());
@@ -59,7 +64,8 @@ void Sprite::Open(std::string file) {
   }
 
   /* Clips texture. */
-  SetClip(0, 0, Sprite::width, Sprite::height);
+  SetClip(Sprite::associated.box.x, Sprite::associated.box.y,
+          Sprite::width, Sprite::height);
 
 }
 
@@ -72,11 +78,11 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 
 }
 
-void Sprite::Render(int x, int y) {
+void Sprite::Render() {
 
   SDL_Rect dstRect;
-  dstRect.x = x;
-  dstRect.y = y;
+  dstRect.x = Sprite::associated.box.x;
+  dstRect.y = Sprite::associated.box.y;
   dstRect.w = Sprite::clipRect.w;
   dstRect.h = Sprite::clipRect.h;
 
@@ -106,6 +112,20 @@ int Sprite::GetHeight() {
 bool Sprite::IsOpen() {
 
   if (Sprite::texture != nullptr) {
+    return true;
+  }
+  return false;
+
+}
+
+void Sprite::Update(float dt) {
+
+
+}
+
+bool Sprite::Is(std::string type) {
+
+  if (type.compare("Sprite") == 0) {
     return true;
   }
   return false;
