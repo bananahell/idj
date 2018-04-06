@@ -27,8 +27,8 @@ Sprite::Sprite(GameObject& associated, std::string file)
 
   Sprite::associated.box.w = Sprite::width;
   Sprite::associated.box.h = Sprite::height;
-  printf("width = (box) %d - (Sprite) %d\n", (int)associated.box.w, Sprite::width);
-  printf("height = (box) %d - (Sprite) %d\n", (int)associated.box.h, Sprite::height);
+  printf("Sprite::Sprite(2) width = (box) %d - (Sprite) %d\n", (int)associated.box.w, Sprite::width);
+  printf("Sprite::Sprite(2) height = (box) %d - (Sprite) %d\n", (int)associated.box.h, Sprite::height);
 
 }
 
@@ -64,13 +64,14 @@ void Sprite::Open(std::string file) {
   }
 
   /* Clips texture. */
-  SetClip(Sprite::associated.box.x, Sprite::associated.box.y,
+printf("Sprite::Open x = %d, y = %d, w = %d, h = %d\n", (int)Sprite::associated.box.x, (int)Sprite::associated.box.y, Sprite::width, Sprite::height);
+  SetClip((int)Sprite::associated.box.x, (int)Sprite::associated.box.y,
           Sprite::width, Sprite::height);
 
 }
 
 void Sprite::SetClip(int x, int y, int w, int h) {
-
+printf("Sprite::SetClip x = %d, y = %d, w = %d, h = %d\n", x, y, w, h);
   Sprite::clipRect.x = x;
   Sprite::clipRect.y = y;
   Sprite::clipRect.w = w;
@@ -80,6 +81,7 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 
 void Sprite::Render() {
 
+  //printf("Sprite::Render box: x = %f, y = %f, w = %d, h = %d\n", associated.box.x, associated.box.y, Sprite::clipRect.w, Sprite::clipRect.h);
   SDL_Rect dstRect;
   dstRect.x = Sprite::associated.box.x;
   dstRect.y = Sprite::associated.box.y;

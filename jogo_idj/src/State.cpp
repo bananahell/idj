@@ -55,7 +55,7 @@ void State::Render() {
 
   /* Rendering background in top left corner. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
-    State::objectArray.at(i)->Render();
+    State::objectArray.at(i).get()->Render();
   }
 
 }
@@ -90,26 +90,27 @@ void State::Input() {
     
     // Se o evento for clique...
     if (event.type == SDL_MOUSEBUTTONDOWN) {
-
       // Percorrer de trás pra frente pra sempre clicar no objeto mais de cima
       for (int i = State::objectArray.size() - 1; i >= 0; --i) {
         // Obtem o ponteiro e casta pra Face.
-        GameObject* go = (GameObject*)State::objectArray[i].get();
+printf("entrou %d\n", i);
+        GameObject* go = (GameObject*)State::objectArray.at(i).get();
         // Nota: Desencapsular o ponteiro é algo que devemos evitar ao máximo.
         // O propósito do unique_ptr é manter apenas uma cópia daquele ponteiro,
         // ao usar get(), violamos esse princípio e estamos menos seguros.
         // Esse código, assim como a classe Face, é provisório. Futuramente, para
         // chamar funções de GameObjects, use objectArray[i]->função() direto.
-/* TODO !!!!
-        if (go->box.Contains({(float)mouseX, (float)mouseY})) {
+        if (go->box.Contains((float)mouseX, (float)mouseY)) {
           Face* face = (Face*)go->GetComponent("Face");
           if (face != nullptr) {
             // Aplica dano
+            printf("Vida antes = %d\n", face->hitpoints);
             face->Damage(std::rand() % 10 + 10);
+            printf("Vida depois = %d\n", face->hitpoints);
             // Sai do loop (só queremos acertar um)
             break;
           }
-        }*/
+        }
       }
     }
     if (event.type == SDL_KEYDOWN) {
@@ -121,7 +122,7 @@ void State::Input() {
       else {
         Vec2 objPos = Vec2(mouseX, mouseY);
         objPos.GetRandWithDistance(200);
-        printf("mouseX = %d, mouseY = %d\n", mouseX, mouseY);
+        printf("State::Input mouseX = %d, mouseY = %d\n", mouseX, mouseY);
         State::AddObject((int)objPos.x, (int)objPos.y);
       }
     }
@@ -139,7 +140,7 @@ void State::AddObject(int mouseX, int mouseY) {
   newEnemy->AddComponent(new Sound(*newEnemy, "assets/audio/boom.wav"));
   newEnemy->AddComponent(new Face(*newEnemy));
 
-  printf("Enemy x = %d, y = %d, w = %d, h = %d\n",
+  printf("State::AddObject Enemy x = %d, y = %d, w = %d, h = %d\n",
     (int)(newEnemy->box.x), (int)(newEnemy->box.y),
     (int)(static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetWidth()),
     (int)(static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetHeight()));

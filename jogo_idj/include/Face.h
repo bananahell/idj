@@ -38,8 +38,6 @@ class Face : public Component {
   void Render();
   bool Is(std::string type);
 
- private:
-
   /**
    * State's background music.
    */

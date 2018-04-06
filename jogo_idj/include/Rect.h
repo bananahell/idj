@@ -21,6 +21,8 @@ class Rect {
   Rect();
   Rect(float w, float h);
 
+  bool Contains(float mouseX, float mouseY);
+
   /**
    * Access to the private member quitRequested.
    *
