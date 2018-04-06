@@ -12,8 +12,8 @@
 #include "State.h"
 
 #include "Face.h"
-#include "Game.h"
 #include "Sound.h"
+#include "Sprite.h"
 #include "Vec2.h"
 
 
@@ -39,13 +39,15 @@ void State::LoadAssets() {
 
 void State::Update(float dt) {
 
+  /* Call for input detection. */
   State::Input();
+  /* Call for objects' update. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
     State::objectArray.at(i)->Update(dt);
   }
+  /* Sweep of dead objects around the game. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
     if (State::objectArray.at(i)->IsDead()) {
-        printf("State::Update ta tocando musica\n");
         State::objectArray.erase(State::objectArray.begin() + i);
     }
   }
@@ -78,35 +80,34 @@ void State::Input() {
   SDL_Event event;
   int mouseX, mouseY;
 
-  // Obtenha as coordenadas do mouse
+  /* Gets mouse coordinates. */
   SDL_GetMouseState(&mouseX, &mouseY);
 
-  // SDL_PollEvent retorna 1 se encontrar eventos, zero caso contrário
+  /* Gets user input events and treats them. */
   while (SDL_PollEvent(&event)) {
 
-    // Se o evento for quit, setar a flag para terminação
+    /* Quit the game. */
     if (event.type == SDL_QUIT) {
       State::quitRequested = true;
     }
 
-    // Se o evento for clique...
+    /* Mouse click even - hitting a penguin. */
     if (event.type == SDL_MOUSEBUTTONDOWN) {
-      // Percorrer de trás pra frente pra sempre clicar no objeto mais de cima
+      /* Always clicking on upper most object with this loop. */
       for (int i = State::objectArray.size() - 1; i >= 0; --i) {
-        // Obtem o ponteiro e casta pra Face.
+        /* Gets game object. */
         GameObject* go = (GameObject*)State::objectArray.at(i).get();
-        // Nota: Desencapsular o ponteiro é algo que devemos evitar ao máximo.
-        // O propósito do unique_ptr é manter apenas uma cópia daquele ponteiro,
-        // ao usar get(), violamos esse princípio e estamos menos seguros.
-        // Esse código, assim como a classe Face, é provisório. Futuramente, para
-        // chamar funções de GameObjects, use objectArray[i]->função() direto.
+        /* Nota: Desencapsular o ponteiro é algo que devemos evitar ao máximo.*
+         * O propósito do unique_ptr é manter apenas uma cópia daquele        *
+         * ponteiro, ao usar get(), violamos esse princípio e estamos menos   *
+         * seguros. Esse código, assim como a classe Face, é provisório.      *
+         * Futuramente, para chamar funções de GameObjects, use               *
+         * objectArray[i]->função() direto.                                   */
         if (go->box.Contains((float)mouseX, (float)mouseY)) {
           Face* face = (Face*)go->GetComponent("Face");
           if (face != nullptr) {
             if (!(face->IsDead())) {
-            // Aplica dano
               face->Damage(std::rand() % 10 + 10);
-            // Sai do loop (só queremos acertar um)
               break;
             }
           }
@@ -114,11 +115,11 @@ void State::Input() {
       }
     }
     if (event.type == SDL_KEYDOWN) {
-      // Se a tecla for ESC, setar a flag de quit
+      /* ESC key - quit the game. */
       if (event.key.keysym.sym == SDLK_ESCAPE) {
         State::quitRequested = true;
       }
-      // Se não, crie um objeto
+      /* Any other key creates a penguin object. */
       else {
         Vec2 objPos = Vec2(mouseX, mouseY);
         objPos.GetRandWithDistance((float)200);
@@ -131,18 +132,25 @@ void State::Input() {
 
 void State::AddObject(int mouseX, int mouseY) {
 
+  /* Instantiates the object. */
   GameObject* newEnemy = new GameObject();
 
+  /* Sets its Rect. */
   newEnemy->box.x = mouseX;
   newEnemy->box.y = mouseY;
 
+  /* Adds its components to build a penguin. */
   newEnemy->AddComponent(new Sprite(*newEnemy, "assets/img/penguinface.png"));
   newEnemy->AddComponent(new Sound(*newEnemy, "assets/audio/boom.wav"));
   newEnemy->AddComponent(new Face(*newEnemy));
 
-  newEnemy->box.x -= static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetWidth() / 2;
-  newEnemy->box.y -= static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetHeight() / 2;
+  /* Correction needed to surround the mouse pointer exactly. */
+  newEnemy->box.x -=
+      static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetWidth() / 2;
+  newEnemy->box.y -=
+      static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetHeight() / 2;
 
+  /* Placing this new object in the object vector. */
   State::objectArray.emplace_back(newEnemy);
 
 }

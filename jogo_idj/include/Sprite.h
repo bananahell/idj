@@ -60,7 +60,7 @@ class Sprite : public Component {
 
   /**
    * Function that opens the texture to be rendered. Does not renders, only
-   opens.
+   * opens.
    *
    * @param file Texture's directory and name to be rendered.
    */
@@ -92,11 +92,24 @@ class Sprite : public Component {
    * @return False if null.
    */
   bool IsOpen();
+  /**
+   * Function called in State's Update to Update the component.
+   *
+   * @param dt - Unused yet.
+   */
   void Update(float dt);
   /**
-   * Takes the texture to be rendered to State's Render function.
+   * Function called in State's Render to Render the component.
    */
   void Render();
+  /**
+   * Function that forces the component to identify itself.
+   *
+   * @param type - The type which this component is asked to be.
+   *
+   * @return True if type asked in the parameter matches the component's type,
+   * which in this case is Sprite.
+   */
   bool Is(std::string type);
 
 };

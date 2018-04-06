@@ -1,7 +1,7 @@
 /**
  * @file Component.h
  *
- * State's functions' declarations.
+ * Component's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -15,42 +15,50 @@
 
 
 /**
- * State class. The class in which the game manifests its current behavior, like
- which music it's playing or if it wants to quit.
+ * Component class. Abstract class that represents the concept of a concept of
+ * a game object, like a an image or a sound of a character.
  */
 class Component {
 
  public:
 
   /**
-   * State's constructor. Sets its content, like background image and music.
+   * Component's constructor. This is what keeps the components connected.
+   *
+   * @param associated - Game object that has this component.
    */
   explicit Component(GameObject& associated);
   /**
-   * State's constructor. Sets its content, like background image and music.
+   * Component's destructor. Just forces each component to implement a
+   * destructor.
    */
   virtual ~Component();
 
   /**
-   * Access to the private member quitRequested.
+   * Pure virtual function that is called in State's Update to Update the
+   * component.
    *
-   * @return True if game needs to quit.
+   * @param dt - Unused yet.
    */
   virtual void Update(float dt) = 0;
   /**
-   * Function that holds the assets used in the State to be pre-loaded.
+   * Pure virtual function that is called in State's Render to Render the
+   * component.
    */
   virtual void Render() = 0;
   /**
-   * Function that determines the behavior of the game when something happens,
-   like when the player inserts an input.
+   * Pure virtual function that forces each component to identify itself.
+   *
+   * @param type - The type which this component is asked to be.
+   *
+   * @return True if type asked in the parameter matches the component's type.
    */
   virtual bool Is(std::string type) = 0;
 
  protected:
 
   /**
-   * Function that gathers Sprite's renderings and takes them to Game.
+   * Game object to which this component is associated.
    */
   GameObject& associated;
 

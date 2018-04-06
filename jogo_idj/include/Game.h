@@ -18,8 +18,8 @@
 
 
 /**
- * Game class. The class in which the game has its basic functionalities,
- like running in a loop and making a single instance of itself.
+ * Game class. The class in which the game has its basic functionalities, like
+ * running in a loop and making a single instance of itself.
  */
 class Game {
 
@@ -27,7 +27,7 @@ class Game {
 
   /**
    * Game's unique singleton constructor. It initializes every basic SDL
-   functionality of the game, like SDL_Init.
+   * functionality of the game, like SDL_Init.
    *
    * @param title Title/name of the game.
    * @param width Width of game's window.

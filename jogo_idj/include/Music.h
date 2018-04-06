@@ -32,7 +32,7 @@ class Music {
 
   /**
    * Music's empty constructor. Starts the member music as a
-   <code>nullptr</code>.
+   * <code>nullptr</code>.
    */
   Music();
   /**
@@ -46,14 +46,14 @@ class Music {
    * Function that plays opened song.
    *
    * @param times Amount of times the song is supposed to be played. -1 for
-   infinite loop.
+   * infinite loop.
    */
   void Play(int times = -1);
   /**
    * Function that stops playing song.
    *
    * @param msToStop Time, in milliseconds, requested for the song to stop
-   through fading out. 0 for immediate stop.
+   * through fading out. 0 for immediate stop.
    */
   void Stop(int msToStop = 1500);
   /**

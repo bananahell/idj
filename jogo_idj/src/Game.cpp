@@ -62,10 +62,10 @@ Game::Game(std::string title, int width, int height) {
 
   Game::renderer = SDL_CreateRenderer(Game::window,
                                       -1,
-                                      SDL_RENDERER_ACCELERATED/* |
-                                      SDL_RENDERER_SOFTWARE |
-                                      SDL_RENDERER_PRESENTVSYNC |
-                                      SDL_RENDERER_TARGETTEXTURE*/);
+                                      SDL_RENDERER_ACCELERATED |
+                                      SDL_RENDERER_TARGETTEXTURE |
+                                      SDL_RENDERER_PRESENTVSYNC/* |
+                                      SDL_RENDERER_SOFTWARE*/);
 
   if (Game::renderer == nullptr) {
     SDL_Log("Unable to initialize renderer: %s", SDL_GetError());

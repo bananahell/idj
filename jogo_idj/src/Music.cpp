@@ -6,9 +6,6 @@
  * @author Pedro Nogueira - 14/0065032
  */
 
-#define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
-
 #include "Music.h"
 
 

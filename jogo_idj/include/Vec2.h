@@ -1,7 +1,7 @@
 /**
  * @file Vec2.h
  *
- * State's functions' declarations.
+ * Vec2's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -11,27 +11,38 @@
 
 
 /**
- * State class. The class in which the game manifests its current behavior, like
- which music it's playing or if it wants to quit.
+ * Vec2 class. Class responsible for vectorized operations in the game.
  */
 class Vec2 {
 
  public:
 
+  /**
+   * Vec2's constructor. Sets its horizontal and vertical coordinates.
+   *
+   * @param x1 - Vec2's horizontal coordinate.
+   * @param y1 - Vec2's vertical coordinate.
+   */
   Vec2(float x1, float y1);
 
+  /**
+   * Function that gets a random point in the game with distance given.
+   *
+   * @param distance - Distance between first Vec2 value and second random Vec2.
+   */
   void GetRandWithDistance(float distance);
 
   /**
-   * Access to the private member quitRequested.
-   *
-   * @return True if game needs to quit.
+   * Horizontal coordinate of Vec2.
    */
   float x;
   /**
-   * Function that holds the assets used in the State to be pre-loaded.
+   * Vertical coordinate of Vec2.
    */
   float y;
+  /**
+   * The number pi manually declared.
+   */
   const double PI = 3.141592653589793;
 
 };

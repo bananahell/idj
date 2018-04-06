@@ -21,9 +21,12 @@ Vec2::Vec2(float x1, float y1) : x(x1), y(y1) {
 void Vec2::GetRandWithDistance(float distance) {
 
   std::random_device randomNum;
-  double randomAngle = (2 * Vec2::PI * (((double)randomNum()) / randomNum.max()));
+  double randomAngle =
+      (2 * Vec2::PI * (((double)randomNum()) / randomNum.max()));
   float posX, posY;
 
+  /* Cosine = next side / hypotenuse   *
+   * Sine = opposite side / hypotenuse */
   posX = (float)(cos(randomAngle) * distance);
   posY = (float)(sin(randomAngle) * distance);
 

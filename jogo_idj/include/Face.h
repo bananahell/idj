@@ -1,7 +1,7 @@
 /**
  * @file Face.h
  *
- * State's functions' declarations.
+ * Face's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -13,34 +13,54 @@
 
 
 /**
- * State class. The class in which the game manifests its current behavior, like
- which music it's playing or if it wants to quit.
+ * Face class. This class represents the mechanics component of a game object
+ * that identifies the game object itself as a character, in this stage of the
+ * project.
  */
 class Face : public Component {
 
  public:
 
   /**
-   * State's constructor. Sets its content, like background image and music.
+   * Face's constructor. Sets the game's object's starting health.
    */
   explicit Face(GameObject& associated);
 
   /**
-   * Access to the private member quitRequested.
+   * Damage mechanic of this Face game object.
    *
-   * @return True if game needs to quit.
+   * @param damage - Damage sent into the character's hitpoints.
    */
   void Damage(int damage);
   /**
-   * Function that holds the assets used in the State to be pre-loaded.
+   * Function called in State's Update to Update the component.
+   *
+   * @param dt - Unused yet.
    */
   void Update(float dt);
+  /**
+   * Function called in State's Render to Render the component.
+   */
   void Render();
+  /**
+   * Function that forces the component to identify itself.
+   *
+   * @param type - The type which this component is asked to be.
+   *
+   * @return True if type asked in the parameter matches the component's type,
+   * which in this case is Face.
+   */
   bool Is(std::string type);
+  /**
+   * Public function used to check if the game object is dead, which means that
+   * its hitpoints have reached zero or less.
+   *
+   * @return True if the game object is dead (hitpoints <= 0).
+   */
   bool IsDead();
 
   /**
-   * State's background music.
+   * Game object's remaining health.
    */
   int hitpoints;
 

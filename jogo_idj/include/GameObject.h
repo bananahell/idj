@@ -1,7 +1,7 @@
 /**
  * @file GameObject.h
  *
- * State's functions' declarations.
+ * GameObject's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -15,56 +15,84 @@
 #include <string>
 #include <vector>
 
+/* Forward declaration to use Component. Way of dodging circular dependency. */
 class Component;
 
 
 /**
- * State class. The class in which the game manifests its current behavior, like
- which music it's playing or if it wants to quit.
+ * GameObject class. The class that represents an object in the game, holding
+ * each of its characteristics, which are called components.
  */
 class GameObject {
 
  public:
 
   /**
-   * State's constructor. Sets its content, like background image and music.
+   * GameObject's constructor. Makes sure the object is alive.
    */
   GameObject();
+  /**
+   * GameObject's destructor. Clears the whole vector of components.
+   */
   ~GameObject();
 
   /**
-   * Access to the private member quitRequested.
+   * Function called in State's Update to Update the components in the object.
    *
-   * @return True if game needs to quit.
+   * @param dt - Unused yet.
    */
   void Update(float dt);
   /**
-   * Function that holds the assets used in the State to be pre-loaded.
+   * Function called in State's Render to Render the components in the object.
    */
   void Render();
   /**
-   * Function that determines the behavior of the game when something happens,
-   like when the player inserts an input.
+   * Public function used to check if the game object is dead, which means that
+   * its Face's hitpoints have reached zero or less.
+   *
+   * @return True if the game object is dead (Face::hitpoints <= 0).
    */
   bool IsDead();
   /**
-   * Function that gathers Sprite's renderings and takes them to Game.
+   * Function that sets the object's death to true.
    */
   void RequestDelete();
+  /**
+   * Function used to add components to the object.
+   *
+   * @param cpt - Component to be added itself.
+   */
   void AddComponent(Component* cpt);
+  /**
+   * Function used to remove components from the object.
+   *
+   * @param cpt - Component to be removed itself.
+   */
   void RemoveComponent(Component* cpt);
+  /**
+   * Function used to look for an object's component by type.
+   *
+   * @param type - The type being looked for.
+   *
+   * @return Component The component with the matching type passed as parameter,
+   * <code>nullptr</code> if not found.
+   */
   Component* GetComponent(std::string type);
 
+  /**
+   * Box in which the object is inserted in the game, with information like x
+   * and y positions and width and height.
+   */
   Rect box;
 
  private:
 
   /**
-   * State's background image/texture.
-   */ // TODO UNIQUE POINTER DOS INFERNO
+   * Vector of unique pointers used to hold the object's components.
+   */
   std::vector<std::unique_ptr<Component>> components;
   /**
-   * State's background music.
+   * Variable that determines if the object is alive or not.
    */
   bool isDead;
 

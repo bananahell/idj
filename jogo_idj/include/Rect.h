@@ -1,7 +1,7 @@
 /**
  * @file Rect.h
  *
- * State's functions' declarations.
+ * Rect's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -11,35 +11,37 @@
 
 
 /**
- * State class. The class in which the game manifests its current behavior, like
- which music it's playing or if it wants to quit.
+ * Rect class. Class containing information needed to place a game object in the
+ * game's window, like coordinates and size.
  */
 class Rect {
 
  public:
 
-  Rect();
-  Rect(float w, float h);
-
-  bool Contains(float mouseX, float mouseY);
+  /**
+   * Function used to find if a given point is inside this rectangle's area.
+   *
+   * @param xCoord - Horizontal coordinate of the given point.
+   * @param yCoord - Vertical coordinate of the given point.
+   *
+   * @return True if the point (xCoord, yCoord) is inside the rectangle's area.
+   */
+  bool Contains(float xCoord, float yCoord);
 
   /**
-   * Access to the private member quitRequested.
-   *
-   * @return True if game needs to quit.
+   * Horizontal coordinate of the left-top most point of the rectangle.
    */
   float x;
   /**
-   * Function that holds the assets used in the State to be pre-loaded.
+   * Vertical coordinate of the left-top most point of the rectangle.
    */
   float y;
   /**
-   * Function that determines the behavior of the game when something happens,
-   like when the player inserts an input.
+   * Rectangle's width.
    */
   float w;
   /**
-   * Function that gathers Sprite's renderings and takes them to Game.
+   * Rectangle's height.
    */
   float h;
 

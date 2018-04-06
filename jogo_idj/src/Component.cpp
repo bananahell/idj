@@ -1,7 +1,7 @@
 /**
  * @file Component.cpp
  *
- * Game's music manager.
+ * Parts of the game objects in the game.
  *
  * @author Pedro Nogueira - 14/0065032
  */

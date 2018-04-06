@@ -1,7 +1,7 @@
 /**
  * @file GameObject.cpp
  *
- * Game's music manager.
+ * Game's objects encapsulator.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -62,8 +62,6 @@ void GameObject::RemoveComponent(Component* cpt) {
   unsigned int position = 0;
   bool notHere = true;
   while (position != GameObject::components.size()) {
-    // TODO tá certo comparar dois ponteiros assim?
-    // PRINCIPALMENTE PARA UNIQUE_PTR
     if (GameObject::components.at(position).get() == cpt) {
       GameObject::components.erase(GameObject::components.begin() + position);
       notHere = false;
@@ -72,7 +70,6 @@ void GameObject::RemoveComponent(Component* cpt) {
   }
 
   if (notHere) {
-    // TODO não achou o elemento no vetor.... sentar e chorar?
   }
 
 }
@@ -81,7 +78,7 @@ Component* GameObject::GetComponent(std::string type) {
 
   for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     if (GameObject::components.at(i)->Is(type)) {
-      return GameObject::components.at(i).get(); /* .get() */
+      return GameObject::components.at(i).get();
     }
   }
   return nullptr;
