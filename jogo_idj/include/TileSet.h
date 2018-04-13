@@ -16,14 +16,20 @@
 
 
 /**
- * TileSet class. Class that holds the sound a game's object makes.
+ * TileSet class. Class that holds the tile set clipped from an image to be
+ * shown in a tile map.
  */
 class TileSet {
 
  public:
 
   /**
-   * TileSet's constructor with file's name. Calls the first constructor and Open.
+   * TileSet's constructor.
+   *
+   * @param associated - Game object to which it is associated.
+   * @param tileWidth - Width of the desired tile.
+   * @param tileHeight - Height of the desired tile.
+   * @param file - Directory and name of the image that holds the tiles.
    */
   TileSet(GameObject& associated,
           int tileWidth,
@@ -31,47 +37,46 @@ class TileSet {
           std::string file);
 
   /**
-   * Function that plays opened song.
+   * Function that renders one tile.
    *
-   * @param times - Times wanted for the sound to play.
+   * @param index - Value of tile.
+   * @param x - Horizontal position of tile.
+   * @param y - Vertical position of tile.
    */
-  void RenderTile(unsigned int index, float x, float y); // TODO unsigned INT, né?
+  void RenderTile(int index, float x, float y);
   /**
-   * Function that forces the component to identify itself.
+   * Function that returns the private tile's width.
    *
-   * @param type - The type which this component is asked to be.
-   *
-   * @return True if type asked in the parameter matches the component's type,
-   * which in this case is TileSet.
+   * @return Width of the tile.
    */
   int GetTileWidth();
   /**
-   * Function that checks if the sound is currently playing.
+   * Function that returns the private tile's height.
    *
-   * @return True if sound is playing.
+   * @return Height of the tile.
    */
   int GetTileHeight();
 
  private:
 
   /**
-   * Chunk of sound used in the SDL functions to play the sounds.
+   * Texture that renders the tile.
    */
   Sprite tileSet;
   /**
-   * Channel used for this sound.
+   * How many of this tile fit horizontally.
    */
   int rows;
   /**
-   * Channel used for this sound.
+   * How many of this tile fit vetically.
    */
   int columns;
   /**
-   * Channel used for this sound.
+   * Tile's width.
    */
   int tileWidth;
   /**
-   * Channel used for this sound.
+   * Tile's height.
    */
   int tileHeight;
 

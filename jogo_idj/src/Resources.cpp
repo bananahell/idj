@@ -1,7 +1,7 @@
 /**
  * @file Resources.cpp
  *
- * Game's sounds manager. They are the game's objects' sound components.
+ * Game's resources' manager. They load and destroy image and sound resources.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -17,9 +17,11 @@ std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
 
 SDL_Texture* Resources::GetImage(std::string file) {
 
+  /* Looks for the requested image. */
   std::unordered_map<std::string, SDL_Texture*>::const_iterator foundIt =
                                             Resources::imageTable.find(file);
 
+  /* If found, return it, if not, create it. */
   if (foundIt != Resources::imageTable.end()) {
     return foundIt->second;
   } else {
@@ -32,6 +34,7 @@ SDL_Texture* Resources::GetImage(std::string file) {
 
 void Resources::ClearImages() {
 
+  /* Clearing each of the allocated images. */
   for (auto& image: Resources::imageTable) {
     SDL_DestroyTexture(image.second);
   }
@@ -41,9 +44,11 @@ void Resources::ClearImages() {
 
 Mix_Music* Resources::GetMusic(std::string file) {
 
+  /* Looks for the requested music. */
   std::unordered_map<std::string, Mix_Music*>::const_iterator foundIt =
                                             Resources::musicTable.find(file);
 
+  /* If found, return it, if not, create it. */
   if (foundIt != Resources::musicTable.end()) {
     return foundIt->second;
   } else {
@@ -60,6 +65,7 @@ Mix_Music* Resources::GetMusic(std::string file) {
 
 void Resources::ClearMusics() {
 
+  /* Clearing each of the allocated musics. */
   for (auto& music: Resources::musicTable) {
     Mix_FreeMusic(music.second);
   }
@@ -69,9 +75,11 @@ void Resources::ClearMusics() {
 
 Mix_Chunk* Resources::GetSound(std::string file) {
 
+  /* Looks for the requested sound. */
   std::unordered_map<std::string, Mix_Chunk*>::const_iterator foundIt =
                                             Resources::soundTable.find(file);
 
+  /* If found, return it, if not, create it. */
   if (foundIt != Resources::soundTable.end()) {
     return foundIt->second;
   } else {
@@ -88,6 +96,7 @@ Mix_Chunk* Resources::GetSound(std::string file) {
 
 void Resources::ClearSounds() {
 
+  /* Clearing each of the allocated images. */
   for (auto& sound: Resources::soundTable) {
     Mix_FreeChunk(sound.second);
   }

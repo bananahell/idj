@@ -38,9 +38,12 @@ class Music {
   /**
    * Music's constructor with a song. Opens the song already.
    *
-   * @param file Song's directory and name to be played.
+   * @param file - Song's directory and name to be played.
    */
   explicit Music(std::string file);
+  /**
+   * Music's destructor.
+   */
   ~Music();
 
   /**

@@ -18,62 +18,73 @@
 
 
 /**
- * TileMap class. Class that holds the sound a game's object makes.
+ * TileMap class. Class that holds the map in which the tiles must be rendered.
  */
 class TileMap : public Component {
 
  public:
 
   /**
-   * TileMap's constructor with file's name. Calls the first constructor and Open.
+   * TileMap's constructor.
+   *
+   * @param associated - Game object to which this tile map is associated.
+   * @param file - Directory and name of the text map file.
+   * @param tileSet - Set of tiles to be used in this map.
    */
   TileMap(GameObject& associated, std::string file, TileSet* tileSet);
 
   /**
-   * Function that plays opened song.
+   * Function that gets the map's coordinates' values.
    *
-   * @param times - Times wanted for the sound to play.
+   * @param file - Directory and name of the text map file.
    */
   void Load(std::string file);
   /**
-   * Function that stops opened song.
+   * Sets the tile set.
+   *
+   * @param tileSet - Tile set to be set.
    */
   void SetTileSet(TileSet* tileSet);
   /**
-   * Function that opens a song by its file's name.
+   * Function that finds the value of the tile in the map in these coordinates.
+   * Since the tiles' matrix is actually a vector, this function is needed to
+   * calculate the position in the vector.
    *
-   * @param file - File's directory and name.
+   * @param x - Horizontal coordinate.
+   * @param y - Vertical coordinate.
+   * @param z - Depth coordinate.
+   *
+   * @return Value in given coordinate.
    */
   int& At(int x, int y, int z = 0);
   /**
-   * Function that checks if the sound is open.
-   *
-   * @return True if sound is open.
+   * Function called by the state's Render to render the map tile.
    */
   void Render();
   /**
-   * Function called in State's Update to Update the component.
+   * Function that renders one of the map's depth layers.
    *
-   * @param dt - Unused yet.
+   * @param layer - Depth layer to be rendered.
+   * @param cameraX - Horizontal position of camera.
+   * @param cameraY - Vertical position of camera.
    */
   void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
   /**
-   * Function called in State's Render to Render the component.
+   * Gets the private width.
+   *
+   * @return Width of the map.
    */
   int GetWidth();
   /**
-   * Function that forces the component to identify itself.
+   * Gets the private height.
    *
-   * @param type - The type which this component is asked to be.
-   *
-   * @return True if type asked in the parameter matches the component's type,
-   * which in this case is TileMap.
+   * @return Height of the map.
    */
   int GetHeight();
   /**
-   * Function that checks if the sound is currently playing.
+   * Gets the private depth.
    *
-   * @return True if sound is playing.
+   * @return Depth of the map.
    */
   int GetDepth();
   /**
@@ -95,7 +106,7 @@ class TileMap : public Component {
  private:
 
   /**
-   * Chunk of sound used in the SDL functions to play the sounds.
+   * Vector of tile values.
    */
   std::vector<int> tileMatrix;
   /**
@@ -103,15 +114,15 @@ class TileMap : public Component {
    */
   TileSet* tileSet;
   /**
-   * Channel used for this sound.
+   * Map's width.
    */
   int mapWidth;
   /**
-   * Channel used for this sound.
+   * Map's height.
    */
   int mapHeight;
   /**
-   * Channel used for this sound.
+   * Map's depth
    */
   int mapDepth;
 

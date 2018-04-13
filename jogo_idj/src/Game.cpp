@@ -11,6 +11,8 @@
 
 #include "Game.h"
 
+#include "Resources.h"
+
 
 Game* Game::instance = nullptr;
 
@@ -80,6 +82,11 @@ Game::Game(std::string title, int width, int height) {
 Game::~Game() {
 
   delete Game::state;
+
+  /* Clearing every resource before quitting. */
+  Resources::ClearImages();
+  Resources::ClearMusics();
+  Resources::ClearSounds();
 
   Mix_CloseAudio();
   Mix_Quit();

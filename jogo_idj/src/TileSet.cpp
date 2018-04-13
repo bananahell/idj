@@ -1,7 +1,7 @@
 /**
  * @file TileSet.cpp
  *
- * Game's sounds manager. They are the game's objects' sound components.
+ * Game's tile sets. These will be put into the map of tiles in TileMap.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -25,13 +25,15 @@ TileSet::TileSet(GameObject& associated,
 
 }
 
-void TileSet::RenderTile(unsigned int index, float x, float y) {
+void TileSet::RenderTile(int index, float x, float y) {
 
   if (index < TileSet::columns * TileSet::rows) {
+    /* Setting the clip. */
     TileSet::tileSet.SetClip(TileSet::tileWidth * (index % TileSet::columns),
                              TileSet::tileHeight * (index / TileSet::columns),
                              TileSet::tileWidth,
                              TileSet::tileHeight);
+    /* Rendering the clip. */
     TileSet::tileSet.Render(x, y);
   }
 

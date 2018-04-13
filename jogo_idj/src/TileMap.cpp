@@ -1,7 +1,8 @@
 /**
  * @file TileMap.cpp
  *
- * Game's sounds manager. They are the game's objects' sound components.
+ * Game's tile map. With the cut tiles, this class determines where the tile
+ * should be displayed.
  *
  * @author Pedro Nogueira - 14/0065032
  */
@@ -23,13 +24,14 @@ void TileMap::Load(std::string file) {
 
   std::ifstream fileContent(file, std::ifstream::in);
   if (!fileContent.is_open()) {
-    // TODO deu ruim
+    exit(EXIT_FAILURE); // TODO exits, but how does it explain it?
   }
 
   std::string lineString;
 
   int indexValue = 0;
   int nextNum = 0;
+  /* Getting the first line, which will always be the sizes of the map. */
   getline(fileContent, lineString);
   for (unsigned int i = 0; i < lineString.size(); i++) {
     if (lineString.at(i) == ',') {
@@ -52,14 +54,18 @@ void TileMap::Load(std::string file) {
     }
   }
 
+  /* Getting the rest of the file, where the actual map really is. */
   int tileValue = 0;
   while (getline(fileContent, lineString)) {
     for (unsigned int i = 0; i < lineString.size(); i++) {
       if (lineString.at(i) >= '0' && lineString.at(i) <= '9') {
         tileValue *= 10;
         tileValue += lineString.at(i) - '0';
-      } else {
+      } else if (lineString.at(i) == ',') {
+        /* Storing it in the vector minus one. */
         TileMap::tileMatrix.push_back(tileValue - 1);
+        tileValue = 0;
+      } else {
         tileValue = 0;
       }
     }
@@ -77,6 +83,7 @@ void TileMap::SetTileSet(TileSet* tileSet) {
 
 int& TileMap::At(int x, int y, int z) {
 
+  /* Calculating the coordinates into the vector. */
   return TileMap::tileMatrix.at(x +
                                 (y * TileMap::mapWidth) +
                                 (z * TileMap::mapWidth * TileMap::mapHeight));
@@ -85,7 +92,8 @@ int& TileMap::At(int x, int y, int z) {
 
 void TileMap::Render() {
 
-  for (unsigned int i = 0; i < TileMap::mapDepth; i++) {
+  /* Rendering each layer of the map. */
+  for (int i = TileMap::mapDepth - 1; i >= 0; i--) {
     TileMap::RenderLayer(i,
                          TileMap::tileSet->GetTileWidth(),
                          TileMap::tileSet->GetTileHeight());
@@ -95,6 +103,7 @@ void TileMap::Render() {
 
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 
+  /* Rendering each tile of the layer. */
   for (int j = 0; j < TileMap::mapHeight; j++) {
     for (int i = 0; i < TileMap::mapWidth; i++) {
       TileMap::tileSet->RenderTile(TileMap::At(i, j, layer),

@@ -21,12 +21,14 @@
 
 State::State() : music(Music()) {
 
+  /* Background's game object being made. */
   GameObject* bg = new GameObject();
   bg->box.x = 0;
   bg->box.y = 0;
   bg->AddComponent(new Sprite(*bg, "assets/img/ocean.jpg"));
   State::objectArray.emplace_back(bg);
 
+  /* Tile map's game object being made. */
   GameObject* tileMap = new GameObject();
   TileSet* tileSet = new TileSet(*tileMap, 64, 64, "assets/img/tileset.png");
   tileMap->box.x = 0;
@@ -105,7 +107,7 @@ void State::Input() {
       /* Always clicking on upper most object with this loop. */
       for (int i = State::objectArray.size() - 1; i >= 0; --i) {
         /* Gets game object. */
-        GameObject* go = (GameObject*)State::objectArray.at(i).get();
+        GameObject* go = static_cast<GameObject*>(State::objectArray.at(i).get());
         /* Nota: Desencapsular o ponteiro é algo que devemos evitar ao máximo.*
          * O propósito do unique_ptr é manter apenas uma cópia daquele        *
          * ponteiro, ao usar get(), violamos esse princípio e estamos menos   *
@@ -113,7 +115,7 @@ void State::Input() {
          * Futuramente, para chamar funções de GameObjects, use               *
          * objectArray[i]->função() direto.                                   */
         if (go->box.Contains((float)mouseX, (float)mouseY)) {
-          Face* face = (Face*)go->GetComponent("Face");
+          Face* face = static_cast<Face*>(go->GetComponent("Face"));
           if (face != nullptr) {
             if (!(face->IsDead())) {
               face->Damage(std::rand() % 10 + 10);

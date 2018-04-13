@@ -19,57 +19,58 @@
 
 
 /**
- * Resources class. Class that holds the sound a game's object makes.
+ * Resources class. Class that holds the game's assets. This class prevents the
+ * game from loading a thing multiple times, using too much processing. Instead,
+ * it holds the resources already made in a hash map and gives access to it to
+ * whoever asks for it.
  */
 class Resources {
 
  public:
 
   /**
-   * Function that plays opened song.
+   * Function that loads the image.
    *
-   * @param times - Times wanted for the sound to play.
+   * @param file - Image's directory and name to be loaded.
    */
   static SDL_Texture* GetImage(std::string file);
   /**
-   * Function that stops opened song.
+   * Function that clears all images.
    */
   static void ClearImages();
   /**
-   * Function that opens a song by its file's name.
+   * Function that loads the music.
    *
-   * @param file - File's directory and name.
+   * @param file - Music's directory and name to be loaded.
    */
   static Mix_Music* GetMusic(std::string file);
   /**
-   * Function that checks if the sound is open.
-   *
-   * @return True if sound is open.
+   * Function that clears all musics.
    */
   static void ClearMusics();
   /**
-   * Function called in State's Update to Update the component.
+   * Function that loads the sound.
    *
-   * @param dt - Unused yet.
+   * @param file - Sound's directory and name to be loaded.
    */
   static Mix_Chunk* GetSound(std::string file);
   /**
-   * Function called in State's Render to Render the component.
+   * Function that clears all sounds.
    */
   static void ClearSounds();
 
  private:
 
   /**
-   * Chunk of sound used in the SDL functions to play the sounds.
+   * Hash map of textures.
    */
   static std::unordered_map<std::string, SDL_Texture*> imageTable;
   /**
-   * Chunk of sound used in the SDL functions to play the sounds.
+   * Hash map of musics.
    */
   static std::unordered_map<std::string, Mix_Music*> musicTable;
   /**
-   * Chunk of sound used in the SDL functions to play the sounds.
+   * Hash map of sounds.
    */
   static std::unordered_map<std::string, Mix_Chunk*> soundTable;
 

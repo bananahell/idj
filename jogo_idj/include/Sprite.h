@@ -99,11 +99,14 @@ class Sprite : public Component {
    */
   void Update(float dt);
   /**
-   * Function called in State's Render to Render the component.
+   * Function called in State's Render to render the component. This calls the
+   * Render with arguments passing the box's variables as arguments.
    */
   void Render();
   /**
-   * Function called in State's Render to Render the component.
+   * Function that is called to render the sprite in the specified position.
+   *
+   * @param 
    */
   void Render(float x, float y);
   /**
