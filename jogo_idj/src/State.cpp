@@ -14,6 +14,8 @@
 #include "Face.h"
 #include "Sound.h"
 #include "Sprite.h"
+#include "TileMap.h"
+#include "TileSet.h"
 #include "Vec2.h"
 
 
@@ -24,6 +26,13 @@ State::State() : music(Music()) {
   bg->box.y = 0;
   bg->AddComponent(new Sprite(*bg, "assets/img/ocean.jpg"));
   State::objectArray.emplace_back(bg);
+
+  GameObject* tileMap = new GameObject();
+  TileSet* tileSet = new TileSet(*tileMap, 64, 64, "assets/img/tileset.png");
+  tileMap->box.x = 0;
+  tileMap->box.y = 0;
+  tileMap->AddComponent(new TileMap(*tileMap, "assets/map/tileMap.txt", tileSet));
+  State::objectArray.emplace_back(tileMap);
 
   State::quitRequested = false;
 

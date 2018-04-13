@@ -8,6 +8,8 @@
 
 #include "Sound.h"
 
+#include "Resources.h"
+
 
 Sound::Sound(GameObject& associated) : Component(associated) {
 
@@ -45,18 +47,12 @@ void Sound::Stop() {
 
 void Sound::Open(std::string file) {
 
-  Sound::chunk = Mix_LoadWAV(file.c_str());
-  if (Sound::chunk == nullptr) {
-    SDL_Log("Unable to open sound Mix_LoadWAV: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+  Sound::chunk = Resources::GetSound(file);
 
 }
 
 Sound::~Sound() {
 
-  Sound::Stop();
-  Mix_FreeChunk(Sound::chunk);
 
 }
 

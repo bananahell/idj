@@ -41,6 +41,7 @@ class Music {
    * @param file Song's directory and name to be played.
    */
   explicit Music(std::string file);
+  ~Music();
 
   /**
    * Function that plays opened song.

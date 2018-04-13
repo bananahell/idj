@@ -46,13 +46,13 @@ class Sprite : public Component {
   /**
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
-  Sprite(GameObject& associated);
+  explicit Sprite(GameObject& associated);
   /**
    * Sprite's constructor with a texture. Opens the texture already.
    *
    * @param file Texture's directory and name to be rendered.
    */
-  explicit Sprite(GameObject& associated, std::string file);
+  Sprite(GameObject& associated, std::string file);
   /**
    * Sprite's destructor.
    */
@@ -102,6 +102,10 @@ class Sprite : public Component {
    * Function called in State's Render to Render the component.
    */
   void Render();
+  /**
+   * Function called in State's Render to Render the component.
+   */
+  void Render(float x, float y);
   /**
    * Function that forces the component to identify itself.
    *

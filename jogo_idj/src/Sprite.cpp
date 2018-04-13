@@ -9,6 +9,7 @@
 #include "Sprite.h"
 
 #include "Game.h"
+#include "Resources.h"
 
 
 Sprite::Sprite(GameObject& associated) : Component(associated) {
@@ -44,13 +45,10 @@ void Sprite::Open(std::string file) {
   if (Sprite::texture != nullptr) {
     SDL_DestroyTexture(Sprite::texture);
   }
+  Sprite::texture = Resources::GetImage(file);
   /* Loads texture. */
   Sprite::texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(),
                                     file.c_str());
-  if (Sprite::texture == nullptr) {
-    SDL_Log("Unable to initialize Texture: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
 
   if (SDL_QueryTexture(Sprite::texture,
                        nullptr,
@@ -62,7 +60,7 @@ void Sprite::Open(std::string file) {
   }
 
   /* Clips texture. */
-SetClip(0, 0, Sprite::width, Sprite::height);
+  SetClip(0, 0, Sprite::width, Sprite::height);
 
 }
 
@@ -77,9 +75,15 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 
 void Sprite::Render() {
 
+  Sprite::Render(Sprite::associated.box.x, Sprite::associated.box.y);
+
+}
+
+void Sprite::Render(float x, float y) {
+
   SDL_Rect dstRect;
-  dstRect.x = Sprite::associated.box.x;
-  dstRect.y = Sprite::associated.box.y;
+  dstRect.x = x;
+  dstRect.y = y;
   dstRect.w = Sprite::clipRect.w;
   dstRect.h = Sprite::clipRect.h;
 
