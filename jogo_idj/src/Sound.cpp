@@ -66,7 +66,7 @@ bool Sound::GetIsPlaying() {
 
 }
 
-void Sound::Render() {
+void Sound::Render(Vec2 cameraPos) {
 
 
 }

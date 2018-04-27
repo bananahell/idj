@@ -90,13 +90,13 @@ int& TileMap::At(int x, int y, int z) {
 
 }
 
-void TileMap::Render() {
+void TileMap::Render(Vec2 cameraPos) {
 
   /* Rendering each layer of the map. */
-  for (int i = TileMap::mapDepth - 1; i >= 0; i--) {
+  for (int i = 0; i < TileMap::mapDepth; i++) {
     TileMap::RenderLayer(i,
-                         TileMap::tileSet->GetTileWidth(),
-                         TileMap::tileSet->GetTileHeight());
+                         cameraPos.x * (1 + i * 0.5),
+                         cameraPos.y * (1 + i * 0.5));
   }
 
 }
@@ -107,8 +107,8 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
   for (int j = 0; j < TileMap::mapHeight; j++) {
     for (int i = 0; i < TileMap::mapWidth; i++) {
       TileMap::tileSet->RenderTile(TileMap::At(i, j, layer),
-                                   i * TileMap::tileSet->GetTileWidth(),
-                                   j * TileMap::tileSet->GetTileHeight());
+                                   i * TileMap::tileSet->GetTileWidth() - cameraX,
+                                   j * TileMap::tileSet->GetTileHeight() - cameraY);
     }
   }
 

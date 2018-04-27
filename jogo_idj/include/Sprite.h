@@ -102,7 +102,7 @@ class Sprite : public Component {
    * Function called in State's Render to render the component. This calls the
    * Render with arguments passing the box's variables as arguments.
    */
-  void Render();
+  void Render(Vec2 cameraPos);
   /**
    * Function that is called to render the sprite in the specified position.
    *

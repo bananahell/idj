@@ -35,6 +35,8 @@ class Game {
    */
   Game(std::string title, int width, int height);
 
+  void CalculateDeltaTime();
+
   /**
    * Game's unique instance.
    */
@@ -51,6 +53,8 @@ class Game {
    * State in which the game is in.
    */
   State* state;
+  int frameStart;
+  float dt;
 
  public:
 
@@ -86,6 +90,7 @@ class Game {
    * @return Game's instance.
    */
   static Game& GetInstance();
+  float GetDeltaTime();
 
 };
 #endif /* GAME_H */

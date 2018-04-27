@@ -73,9 +73,10 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 
 }
 
-void Sprite::Render() {
+void Sprite::Render(Vec2 cameraPos) {
 
-  Sprite::Render(Sprite::associated.box.x, Sprite::associated.box.y);
+  Sprite::Render(Sprite::associated.box.x - cameraPos.x,
+                 Sprite::associated.box.y - cameraPos.y);
 
 }
 

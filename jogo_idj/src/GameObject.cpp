@@ -31,10 +31,10 @@ void GameObject::Update(float dt) {
 
 }
 
-void GameObject::Render() {
+void GameObject::Render(Vec2 cameraPos) {
 
   for (unsigned int i = 0; i < GameObject::components.size(); i++) {
-    GameObject::components.at(i)->Render();
+    GameObject::components.at(i)->Render(cameraPos);
   }
 
 }

@@ -25,10 +25,6 @@ class State {
  private:
 
   /**
-   * Function made to detect input from user and act accordingly.
-   */
-  void Input();
-  /**
    * Function that adds game objects to the game.
    *
    * @param mouseX - Horizontal coordinate of the object.
@@ -48,6 +44,8 @@ class State {
    * Array of objects contained in this state.
    */
   std::vector<std::unique_ptr<GameObject>> objectArray;
+  GameObject* tileMap;
+  GameObject* bg;
 
  public:
 

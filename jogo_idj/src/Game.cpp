@@ -11,6 +11,7 @@
 
 #include "Game.h"
 
+#include "InputManager.h"
 #include "Resources.h"
 
 
@@ -104,7 +105,9 @@ void Game::Run() {
 
   /* Execute game's loop with its functionalities. */
   while (Game::state->QuitRequested() == false) {
-    Game::GetInstance().state->Update(0);
+    CalculateDeltaTime();
+    InputManager::GetInstance().Update();
+    Game::GetInstance().state->Update(GetDeltaTime());
     Game::GetInstance().state->Render();
     SDL_RenderPresent(Game::GetInstance().renderer);
     SDL_Delay(33);
@@ -131,5 +134,18 @@ Game& Game::GetInstance() {
     Game::instance = new Game("Pedro Nogueira - 14/0065032", 1024, 600);
   }
   return *instance;
+
+}
+
+void Game::CalculateDeltaTime() {
+
+  Game::dt = (SDL_GetTicks()/1000) - Game::frameStart;
+  Game::frameStart = Game::frameStart + Game::dt;
+
+}
+
+float Game::GetDeltaTime() {
+
+  return Game::dt;
 
 }

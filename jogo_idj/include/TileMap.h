@@ -12,6 +12,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "TileSet.h"
+#include "Vec2.h"
 
 #include <string>
 #include <vector>
@@ -60,7 +61,7 @@ class TileMap : public Component {
   /**
    * Function called by the state's Render to render the map tile.
    */
-  void Render();
+  void Render(Vec2 cameraPos);
   /**
    * Function that renders one of the map's depth layers.
    *

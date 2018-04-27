@@ -67,7 +67,7 @@ class Sound : public Component {
   /**
    * Function called in State's Render to Render the component.
    */
-  void Render();
+  void Render(Vec2 cameraPos);
   /**
    * Function that forces the component to identify itself.
    *

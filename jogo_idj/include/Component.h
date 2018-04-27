@@ -9,7 +9,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include <GameObject.h>
+#include "GameObject.h"
+#include "Vec2.h"
 
 #include <string>
 
@@ -45,7 +46,7 @@ class Component {
    * Pure virtual function that is called in State's Render to Render the
    * component.
    */
-  virtual void Render() = 0;
+  virtual void Render(Vec2 cameraPos) = 0;
   /**
    * Pure virtual function that forces each component to identify itself.
    *

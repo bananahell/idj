@@ -10,6 +10,7 @@
 #define GAMEOBJECT_H
 
 #include "Rect.h"
+#include "Vec2.h"
 
 #include <memory>
 #include <string>
@@ -45,7 +46,7 @@ class GameObject {
   /**
    * Function called in State's Render to Render the components in the object.
    */
-  void Render();
+  void Render(Vec2 cameraPos);
   /**
    * Public function used to check if the game object is dead, which means that
    * its Face's hitpoints have reached zero or less.

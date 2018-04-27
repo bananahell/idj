@@ -45,7 +45,7 @@ void Face::Update(float dt) {
 
 }
 
-void Face::Render() {
+void Face::Render(Vec2 cameraPos) {
 
 
 }

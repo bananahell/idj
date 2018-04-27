@@ -11,7 +11,10 @@
 
 #include "State.h"
 
+#include "Camera.h"
+#include "CameraFollower.h"
 #include "Face.h"
+#include "InputManager.h"
 #include "Sound.h"
 #include "Sprite.h"
 #include "TileMap.h"
@@ -22,19 +25,20 @@
 State::State() : music(Music()) {
 
   /* Background's game object being made. */
-  GameObject* bg = new GameObject();
-  bg->box.x = 0;
-  bg->box.y = 0;
-  bg->AddComponent(new Sprite(*bg, "assets/img/ocean.jpg"));
-  State::objectArray.emplace_back(bg);
+  State::bg = new GameObject();
+  State::bg->box.x = 0;
+  State::bg->box.y = 0;
+  State::bg->AddComponent(new Sprite(*bg, "assets/img/ocean.jpg"));
+  State::bg->AddComponent(new CameraFollower(*bg));
 
   /* Tile map's game object being made. */
-  GameObject* tileMap = new GameObject();
+  State::tileMap = new GameObject();
   TileSet* tileSet = new TileSet(*tileMap, 64, 64, "assets/img/tileset.png");
-  tileMap->box.x = 0;
-  tileMap->box.y = 0;
-  tileMap->AddComponent(new TileMap(*tileMap, "assets/map/tileMap.txt", tileSet));
-  State::objectArray.emplace_back(tileMap);
+  State::tileMap->box.x = 0;
+  State::tileMap->box.y = 0;
+  State::tileMap->AddComponent(new TileMap(*tileMap,
+                               "assets/map/tileMap.txt",
+                               tileSet));
 
   State::quitRequested = false;
 
@@ -50,8 +54,38 @@ void State::LoadAssets() {
 
 void State::Update(float dt) {
 
-  /* Call for input detection. */
-  State::Input();
+  State::quitRequested = InputManager::GetInstance().QuitRequested();
+
+  Camera::Update(dt);
+  State::bg->Update(dt);
+  State::tileMap->Update(dt);
+
+  if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+    Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(),
+                       InputManager::GetInstance().GetMouseY());
+    objPos.GetRandWithDistance((float)200);
+    State::AddObject((int)objPos.x, (int)objPos.y);
+  }
+
+  if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
+    for (int i = State::objectArray.size() - 1; i >= 0; i--) {
+      if (State::objectArray[i]->
+                 box.Contains(InputManager::GetInstance().GetMouseX(),
+                              InputManager::GetInstance().GetMouseY())) {
+
+        Face* face = static_cast<Face*>(State::objectArray[i]->GetComponent("Face"));
+        if (face != nullptr) {
+          if (!face->IsDead()) {
+            face->Damage(std::rand() % 10 + 10);
+            Camera::Follow(objectArray[i].get());
+            break;
+          }
+        }
+
+      }
+    }
+  }
+
   /* Call for objects' update. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
     State::objectArray.at(i)->Update(dt);
@@ -59,7 +93,8 @@ void State::Update(float dt) {
   /* Sweep of dead objects around the game. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
     if (State::objectArray.at(i)->IsDead()) {
-        State::objectArray.erase(State::objectArray.begin() + i);
+      Camera::Unfollow();
+      State::objectArray.erase(State::objectArray.begin() + i);
     }
   }
 
@@ -67,9 +102,11 @@ void State::Update(float dt) {
 
 void State::Render() {
 
+  static_cast<TileMap*>(State::tileMap->GetComponent("TileMap"))->
+                        RenderLayer(0, Camera::pos.x, Camera::pos.y);
   /* Rendering background in top left corner. */
   for (unsigned int i = 0; i < State::objectArray.size(); i++) {
-    State::objectArray.at(i).get()->Render();
+    State::objectArray.at(i).get()->Render(Camera::pos);
   }
 
 }
@@ -83,61 +120,6 @@ bool State::QuitRequested() {
 State::~State() {
 
   State::objectArray.clear();
-
-}
-
-void State::Input() {
-
-  SDL_Event event;
-  int mouseX, mouseY;
-
-  /* Gets mouse coordinates. */
-  SDL_GetMouseState(&mouseX, &mouseY);
-
-  /* Gets user input events and treats them. */
-  while (SDL_PollEvent(&event)) {
-
-    /* Quit the game. */
-    if (event.type == SDL_QUIT) {
-      State::quitRequested = true;
-    }
-
-    /* Mouse click even - hitting a penguin. */
-    if (event.type == SDL_MOUSEBUTTONDOWN) {
-      /* Always clicking on upper most object with this loop. */
-      for (int i = State::objectArray.size() - 1; i >= 0; --i) {
-        /* Gets game object. */
-        GameObject* go = static_cast<GameObject*>(State::objectArray.at(i).get());
-        /* Nota: Desencapsular o ponteiro é algo que devemos evitar ao máximo.*
-         * O propósito do unique_ptr é manter apenas uma cópia daquele        *
-         * ponteiro, ao usar get(), violamos esse princípio e estamos menos   *
-         * seguros. Esse código, assim como a classe Face, é provisório.      *
-         * Futuramente, para chamar funções de GameObjects, use               *
-         * objectArray[i]->função() direto.                                   */
-        if (go->box.Contains((float)mouseX, (float)mouseY)) {
-          Face* face = static_cast<Face*>(go->GetComponent("Face"));
-          if (face != nullptr) {
-            if (!(face->IsDead())) {
-              face->Damage(std::rand() % 10 + 10);
-              break;
-            }
-          }
-        }
-      }
-    }
-    if (event.type == SDL_KEYDOWN) {
-      /* ESC key - quit the game. */
-      if (event.key.keysym.sym == SDLK_ESCAPE) {
-        State::quitRequested = true;
-      }
-      /* Any other key creates a penguin object. */
-      else {
-        Vec2 objPos = Vec2(mouseX, mouseY);
-        objPos.GetRandWithDistance((float)200);
-        State::AddObject((int)objPos.x, (int)objPos.y);
-      }
-    }
-  }
 
 }
 
