@@ -107,6 +107,10 @@ void Game::Run() {
   while (Game::state->QuitRequested() == false) {
     CalculateDeltaTime();
     InputManager::GetInstance().Update();
+    if (SDL_RenderClear(Game::renderer) != 0) {
+      SDL_Log("Unable to clear renderer: %s", SDL_GetError());
+      exit(EXIT_FAILURE);
+    }
     Game::GetInstance().state->Update(GetDeltaTime());
     Game::GetInstance().state->Render();
     SDL_RenderPresent(Game::GetInstance().renderer);
@@ -139,13 +143,13 @@ Game& Game::GetInstance() {
 
 void Game::CalculateDeltaTime() {
 
-  Game::dt = (SDL_GetTicks()/1000) - Game::frameStart;
+  Game::dt = SDL_GetTicks() - Game::frameStart;
   Game::frameStart = Game::frameStart + Game::dt;
 
 }
 
 float Game::GetDeltaTime() {
 
-  return Game::dt;
+  return Game::dt/1000;
 
 }

@@ -34,6 +34,7 @@ InputManager::~InputManager() {
 
 void InputManager::Update() {
 
+  InputManager::quitRequested = false;
   SDL_Event event;
   SDL_GetMouseState(&mouseX, &mouseY);
   InputManager::mouseX += Camera::pos.x;

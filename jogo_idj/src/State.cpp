@@ -60,6 +60,13 @@ void State::Update(float dt) {
   State::bg->Update(dt);
   State::tileMap->Update(dt);
 
+  if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) ||
+      InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) ||
+      InputManager::GetInstance().KeyPress(UP_ARROW_KEY) ||
+      InputManager::GetInstance().KeyPress(DOWN_ARROW_KEY)) {
+    Camera::Unfollow();
+  }
+
   if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
     Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(),
                        InputManager::GetInstance().GetMouseY());
@@ -102,9 +109,9 @@ void State::Update(float dt) {
 
 void State::Render() {
 
+  State::bg->Render(Camera::pos);
   static_cast<TileMap*>(State::tileMap->GetComponent("TileMap"))->
                         RenderLayer(0, Camera::pos.x, Camera::pos.y);
-  /* Rendering background in top left corner. */
   for (unsigned int i = 0; i < State::objectArray.size(); i++) {
     State::objectArray.at(i).get()->Render(Camera::pos);
   }
