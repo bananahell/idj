@@ -11,6 +11,7 @@
 
 #include "State.h"
 
+#include "Alien.h"
 #include "Camera.h"
 #include "CameraFollower.h"
 #include "InputManager.h"
@@ -43,7 +44,8 @@ State::State() : music(Music()) {
 
   GameObject* go = new GameObject();
   go->AddComponent(new Alien(*go, 8));
-  go->box.SetPos(512 - go->box.w/2, 300 - go->box.h/2);
+  go->box.x = 512 - go->box.w/2;
+  go->box.y = 300 - go->box.h/2;
   AddObject(go);
 
   State::quitRequested = false;
@@ -65,20 +67,6 @@ void State::Update(float dt) {
   Camera::Update(dt);
   State::bg->Update(dt);
   State::tileMap->Update(dt);
-
-  if (InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY) ||
-      InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY) ||
-      InputManager::GetInstance().KeyPress(UP_ARROW_KEY) ||
-      InputManager::GetInstance().KeyPress(DOWN_ARROW_KEY)) {
-    Camera::Unfollow();
-  }
-
-  if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
-    Vec2 objPos = Vec2(InputManager::GetInstance().GetMouseX(),
-                       InputManager::GetInstance().GetMouseY());
-    objPos.GetRandWithDistance((float)200);
-    State::AddObject((int)objPos.x, (int)objPos.y);
-  }
 
   /* Call for objects' update. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
@@ -120,25 +108,16 @@ State::~State() {
 std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
 
   /* Instantiates the object. */
-  std::shared_ptr<GameObject>
-  GameObject* newEnemy = new GameObject();
-
-  /* Sets its Rect. */
-  newEnemy->box.x = mouseX;
-  newEnemy->box.y = mouseY;
-
-  /* Adds its components to build a penguin. */
-  newEnemy->AddComponent(new Sprite(*newEnemy, "assets/img/penguinface.png"));
-  newEnemy->AddComponent(new Sound(*newEnemy, "assets/audio/boom.wav"));
-
-  /* Correction needed to surround the mouse pointer exactly. */
-  newEnemy->box.x -=
-      static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetWidth() / 2;
-  newEnemy->box.y -=
-      static_cast<Sprite*>(newEnemy->GetComponent("Sprite"))->GetHeight() / 2;
+  std::shared_ptr<GameObject> pointer = std::shared_ptr<GameObject>(go);
 
   /* Placing this new object in the object vector. */
-  State::objectArray.emplace_back(newEnemy);
+  State::objectArray.push_back(pointer);
+
+  if (State::started) {
+    pointer->Start();
+  }
+
+  return pointer;
 
 }
 
@@ -149,17 +128,6 @@ void State::Start() {
     State::objectArray[i]->Start();
   }
   State::started = true;
-
-}
-
-std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
-
-  std::shared_ptr<GameObject> pointer = std::shared_ptr<GameObject>(go);
-  State::objectArray.push_back(pointer);
-  if (State::started) {
-    pointer->Start();
-  }
-  return pointer;
 
 }
 

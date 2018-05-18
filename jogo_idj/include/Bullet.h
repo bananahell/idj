@@ -24,10 +24,15 @@ class Bullet : public Component {
 
  public:
 
-  Bullet(GameObject& associated, float maxDistance, float angle, float speed, int damage, std::string sprite);
+  Bullet(GameObject& associated,
+         float maxDistance,
+         float angle,
+         float speed,
+         int damage,
+         std::string sprite);
   ~Bullet();
   void Update(float dt);
-  void Render();
+  void Render(Vec2 cameraPos);
   bool Is(std::string type);
   int GetDamage();
 

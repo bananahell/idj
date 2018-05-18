@@ -16,11 +16,11 @@
 
 Alien::Alien(GameObject& associated, int nMinions) : Component(associated) {
 
-  associated.AddComponent(new Sprite(associated, "assets/img/alien.png"));
-
   Alien::hp = 10;
   Alien::speed = Vec2();
-  //? Alien::nMinions = nMinions;
+  Alien::nMinions = nMinions;
+
+  associated.AddComponent(new Sprite(associated, "assets/img/alien.png"));
 
 }
 
@@ -104,7 +104,7 @@ void Alien::Update(float dt) {
 
 }
 
-void Alien::Render() {
+void Alien::Render(Vec2 cameraPos) {
 
 }
 

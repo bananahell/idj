@@ -9,6 +9,8 @@
 #ifndef RECT_H
 #define RECT_H
 
+#include "Vec2.h"
+
 
 /**
  * Rect class. Class containing information needed to place a game object in the
@@ -27,6 +29,9 @@ class Rect {
    * @return True if the point (xCoord, yCoord) is inside the rectangle's area.
    */
   bool Contains(float xCoord, float yCoord);
+  Vec2 GetPos();
+	Vec2 GetCenter();
+	void SetPos(Vec2 pos);
 
   /**
    * Horizontal coordinate of the left-top most point of the rectangle.

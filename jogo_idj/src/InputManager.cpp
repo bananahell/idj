@@ -11,6 +11,15 @@
 #include "Camera.h"
 
 
+std::unordered_map<int, bool> InputManager::keyState;
+std::unordered_map<int, int> InputManager::keyUpdate;
+bool InputManager::mouseState [6];
+int InputManager::mouseUpdate [6];
+int InputManager::mouseX;
+int InputManager::mouseY;
+int InputManager::updateCounter;
+bool InputManager::quitRequested = false;
+
 InputManager& InputManager::GetInstance() {
 
   static InputManager inputManager;

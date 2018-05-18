@@ -17,6 +17,7 @@ class Vec2 {
 
  public:
 
+  Vec2();
   /**
    * Vec2's constructor. Sets its horizontal and vertical coordinates.
    *
@@ -31,6 +32,20 @@ class Vec2 {
    * @param distance - Distance between first Vec2 value and second random Vec2.
    */
   void GetRandWithDistance(float distance);
+  Vec2 operator+(const Vec2& rhs) const;
+  Vec2 operator+(const float rhs) const;
+  Vec2 operator-(const Vec2& rhs) const;
+  Vec2 operator-(const float rhs) const;
+  Vec2 operator*(const Vec2& rhs) const;
+  Vec2 operator*(const float rhs) const;
+  float GetDX(float x);
+  float GetDY(float y);
+  float GetDS(Vec2 pos);
+  float GetCos(Vec2 pos);
+  float GetSin(Vec2 pos);
+	static float Cos(float ang);
+	static float Sin(float ang);
+	float GetAngle(Vec2 pos);
 
   /**
    * Horizontal coordinate of Vec2.
@@ -40,10 +55,6 @@ class Vec2 {
    * Vertical coordinate of Vec2.
    */
   float y;
-  /**
-   * The number pi manually declared.
-   */
-  const double PI = 3.141592653589793;
 
 };
 #endif /* VEC2_H */

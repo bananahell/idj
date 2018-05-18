@@ -32,31 +32,31 @@ class InputManager {
 
  public:
 
-  void Update();
-  bool KeyPress(int key);
-  bool KeyRelease(int key);
-  bool IsKeyDown(int key);
-  bool MousePress(int button);
-  bool MouseRelease(int button);
-  bool IsMouseDown(int button);
-  int GetMouseX();
-  int GetMouseY();
-  bool QuitRequested();
-  static InputManager&  GetInstance();
+  static void Update();
+  static bool KeyPress(int key);
+  static bool KeyRelease(int key);
+  static bool IsKeyDown(int key);
+  static bool MousePress(int button);
+  static bool MouseRelease(int button);
+  static bool IsMouseDown(int button);
+  static int GetMouseX();
+  static int GetMouseY();
+  static bool QuitRequested();
+  static InputManager& GetInstance();
 
  private:
 
   InputManager();
   ~InputManager();
 
-  bool mouseState[6];
-  int mouseUpdate[6];
-  std::unordered_map<int, bool> keyState;
-  std::unordered_map<int, int> keyUpdate;
-  bool quitRequested;
-  int updateCounter;
-  int mouseX;
-  int mouseY;
+  static bool mouseState[6];
+  static int mouseUpdate[6];
+  static std::unordered_map<int, bool> keyState;
+  static std::unordered_map<int, int> keyUpdate;
+  static bool quitRequested;
+  static int updateCounter;
+  static int mouseX;
+  static int mouseY;
 
 };
 #endif /* INPUTMANAGER_H */

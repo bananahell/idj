@@ -25,7 +25,7 @@ class Alien : public Component {
   ~Alien();
   void Start();
   void Update(float dt);
-  void Render();
+  void Render(Vec2 cameraPos);
   bool Is(std::string type);
 
  private:
@@ -34,11 +34,11 @@ class Alien : public Component {
 
    public:
 
-    Action(ActionType type, float x, float y);
-
     enum ActionType { MOVE, SHOOT };
     ActionType type;
     Vec2 pos;
+
+    Action(ActionType type, float x, float y);
 
   };
 
@@ -46,7 +46,7 @@ class Alien : public Component {
   int hp;
   std::queue<Action> taskQueue;
   std::vector<std::weak_ptr<GameObject>> minionArray;
-  //? int nMinions;
+  int nMinions;
 
 };
 

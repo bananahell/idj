@@ -20,14 +20,15 @@ Sprite::Sprite(GameObject& associated) : Component(associated) {
 
 }
 
-Sprite::Sprite(GameObject& associated, std::string file)
-              : Component(associated) {
+Sprite::Sprite(GameObject& associated,
+               std::string file,
+               int frameCount,
+               float frameTime)
+        : Sprite(associated) {
 
-  Sprite::texture = nullptr;
-  Sprite::Open(file);
-
-  Sprite::associated.box.w = Sprite::width;
-  Sprite::associated.box.h = Sprite::height;
+  Sprite::frameCount = frameCount;
+  Sprite::frameTime = frameTime;
+  Open(file);
 
 }
 
@@ -131,5 +132,13 @@ bool Sprite::Is(std::string type) {
     return true;
   }
   return false;
+
+}
+
+void Sprite::SetScale(Vec2 scale) {
+
+  Sprite::scale = scale;
+  associated.box.w = GetWidth();
+  associated.box.h = GetHeight();
 
 }

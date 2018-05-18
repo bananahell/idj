@@ -11,7 +11,13 @@
 #include "Sprite.h"
 
 
-Bullet::Bullet(GameObject& associated, float maxDistance, float angle, float speed, int damage, std::string sprite) : Component(associated) {
+Bullet::Bullet(GameObject& associated,
+               float maxDistance,
+               float angle,
+               float speed,
+               int damage,
+               std::string sprite)
+       : Component(associated) {
 
   Bullet::speed = Vec2(speed*Vec2::Cos(angle), speed*Vec2::Sin(angle));
   Bullet::damage = damage;
@@ -19,6 +25,10 @@ Bullet::Bullet(GameObject& associated, float maxDistance, float angle, float spe
   associated.rotation = angle;
 
   associated.AddComponent(new Sprite(associated, sprite, 3, 0.33));
+
+}
+
+Bullet::~Bullet() {
 
 }
 
@@ -34,7 +44,7 @@ void Bullet::Update(float dt) {
 
 }
 
-void Bullet::Render() {
+void Bullet::Render(Vec2 cameraPos) {
 
 }
 

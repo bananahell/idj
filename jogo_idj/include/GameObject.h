@@ -86,6 +86,7 @@ class GameObject {
    * and y positions and width and height.
    */
   Rect box;
+	float rotation;
 
  private:
 

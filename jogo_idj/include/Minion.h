@@ -24,9 +24,9 @@ class Minion : public Component {
 
  public:
 
-  Minion(GameObject& associated, std::weak_ptr<GameObject> alienCenter, float arcOffsetDeg);
+  Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg);
   void Update(float dt);
-  void Render();
+  void Render(Vec2 cameraPos);
   bool Is(std::string type);
   void Shoot(Vec2 target);
 

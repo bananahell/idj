@@ -41,6 +41,10 @@ class Sprite : public Component {
    */
   SDL_Rect clipRect;
   Vec2 scale;
+  int frameCount;
+  int currentFrame;
+  float frameTime;
+  float timeElapsed;
 
  public:
 
@@ -48,12 +52,7 @@ class Sprite : public Component {
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
   explicit Sprite(GameObject& associated);
-  /**
-   * Sprite's constructor with a texture. Opens the texture already.
-   *
-   * @param file Texture's directory and name to be rendered.
-   */
-  Sprite(GameObject& associated, std::string file);
+  Sprite(GameObject& associated, std::string file, int frameCount = 1, float frameTime = 1);
   /**
    * Sprite's destructor.
    */
@@ -121,6 +120,7 @@ class Sprite : public Component {
   bool Is(std::string type);
   void SetScaleX(float scaleX, float scaleY);
   Vec2 GetScale();
+	void SetScale(Vec2 scale);
 
 };
 #endif /* SPRITE_H */

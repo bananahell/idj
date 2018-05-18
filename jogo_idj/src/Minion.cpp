@@ -26,7 +26,6 @@ Minion::Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetD
   float scale = 1 + (float)(rand()%501)/1000;
   sp->SetScale(Vec2(scale, scale));
   associated.AddComponent(sp);
-  //associated.AddComponent(new Sprite(associated, "assets/img/minion.png"));
 
 }
 
@@ -54,7 +53,7 @@ void Minion::Update(float dt) {
 
 }
 
-void Minion::Render() {
+void Minion::Render(Vec2 cameraPos) {
 
 }
 
