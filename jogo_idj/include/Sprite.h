@@ -40,6 +40,7 @@ class Sprite : public Component {
    * Texture clipped rectangle supposed to be rendered.
    */
   SDL_Rect clipRect;
+  Vec2 scale;
 
  public:
 
@@ -118,6 +119,8 @@ class Sprite : public Component {
    * which in this case is Sprite.
    */
   bool Is(std::string type);
+  void SetScaleX(float scaleX, float scaleY);
+  Vec2 GetScale();
 
 };
 #endif /* SPRITE_H */

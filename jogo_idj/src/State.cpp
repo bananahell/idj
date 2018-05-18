@@ -13,7 +13,6 @@
 
 #include "Camera.h"
 #include "CameraFollower.h"
-#include "Face.h"
 #include "InputManager.h"
 #include "Sound.h"
 #include "Sprite.h"
@@ -23,6 +22,8 @@
 
 
 State::State() : music(Music()) {
+
+  State::started = false;
 
   /* Background's game object being made. */
   State::bg = new GameObject();
@@ -39,6 +40,11 @@ State::State() : music(Music()) {
   State::tileMap->AddComponent(new TileMap(*tileMap,
                                "assets/map/tileMap.txt",
                                tileSet));
+
+  GameObject* go = new GameObject();
+  go->AddComponent(new Alien(*go, 8));
+  go->box.SetPos(512 - go->box.w/2, 300 - go->box.h/2);
+  AddObject(go);
 
   State::quitRequested = false;
 
@@ -72,25 +78,6 @@ void State::Update(float dt) {
                        InputManager::GetInstance().GetMouseY());
     objPos.GetRandWithDistance((float)200);
     State::AddObject((int)objPos.x, (int)objPos.y);
-  }
-
-  if (InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)) {
-    for (int i = State::objectArray.size() - 1; i >= 0; i--) {
-      if (State::objectArray[i]->
-                 box.Contains(InputManager::GetInstance().GetMouseX(),
-                              InputManager::GetInstance().GetMouseY())) {
-
-        Face* face = static_cast<Face*>(State::objectArray[i]->GetComponent("Face"));
-        if (face != nullptr) {
-          if (!face->IsDead()) {
-            face->Damage(std::rand() % 10 + 10);
-            Camera::Follow(objectArray[i].get());
-            break;
-          }
-        }
-
-      }
-    }
   }
 
   /* Call for objects' update. */
@@ -130,9 +117,10 @@ State::~State() {
 
 }
 
-void State::AddObject(int mouseX, int mouseY) {
+std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
 
   /* Instantiates the object. */
+  std::shared_ptr<GameObject>
   GameObject* newEnemy = new GameObject();
 
   /* Sets its Rect. */
@@ -142,7 +130,6 @@ void State::AddObject(int mouseX, int mouseY) {
   /* Adds its components to build a penguin. */
   newEnemy->AddComponent(new Sprite(*newEnemy, "assets/img/penguinface.png"));
   newEnemy->AddComponent(new Sound(*newEnemy, "assets/audio/boom.wav"));
-  newEnemy->AddComponent(new Face(*newEnemy));
 
   /* Correction needed to surround the mouse pointer exactly. */
   newEnemy->box.x -=
@@ -152,5 +139,37 @@ void State::AddObject(int mouseX, int mouseY) {
 
   /* Placing this new object in the object vector. */
   State::objectArray.emplace_back(newEnemy);
+
+}
+
+void State::Start() {
+
+  State::LoadAssets();
+  for (int i = 0; i < State::objectArray.size(); i++) {
+    State::objectArray[i]->Start();
+  }
+  State::started = true;
+
+}
+
+std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
+
+  std::shared_ptr<GameObject> pointer = std::shared_ptr<GameObject>(go);
+  State::objectArray.push_back(pointer);
+  if (State::started) {
+    pointer->Start();
+  }
+  return pointer;
+
+}
+
+std::weak_ptr<GameObject> State::GetObjectPtr(GameObject* go) {
+
+  for (int i = 0; i < State::objectArray.size(); i++) {
+    if (State::objectArray[i].get() == go) {
+      return State::objectArray[i];
+    }
+  }
+  return std::weak_ptr<GameObject>();
 
 }

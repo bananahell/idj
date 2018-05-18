@@ -79,6 +79,7 @@ class GameObject {
    * <code>nullptr</code> if not found.
    */
   Component* GetComponent(std::string type);
+  void Start();
 
   /**
    * Box in which the object is inserted in the game, with information like x
@@ -96,6 +97,7 @@ class GameObject {
    * Variable that determines if the object is alive or not.
    */
   bool isDead;
+  bool started;
 
 };
 #endif /* GAMEOBJECT_H */

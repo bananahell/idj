@@ -100,6 +100,7 @@ Game::~Game() {
 
 void Game::Run() {
 
+  Game::state->Start();
   /* Load assets before the game's loop. */
   Game::GetInstance().state->LoadAssets();
 

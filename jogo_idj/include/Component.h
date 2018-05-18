@@ -55,6 +55,7 @@ class Component {
    * @return True if type asked in the parameter matches the component's type.
    */
   virtual bool Is(std::string type) = 0;
+  virtual void Start();
 
  protected:
 

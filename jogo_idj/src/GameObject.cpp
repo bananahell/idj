@@ -13,6 +13,7 @@
 
 GameObject::GameObject() : box(Rect()){
 
+  GameObject::started = false;
   GameObject::isDead = false;
 
 }
@@ -82,5 +83,14 @@ Component* GameObject::GetComponent(std::string type) {
     }
   }
   return nullptr;
+
+}
+
+void GameObject::Start() {
+
+  for (int i = 0; i < GameObject::components.size(); i++) {
+    GameObject::components[i]->Start();
+  }
+  GameObject::started = true;
 
 }

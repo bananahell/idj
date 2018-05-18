@@ -25,14 +25,6 @@ class State {
  private:
 
   /**
-   * Function that adds game objects to the game.
-   *
-   * @param mouseX - Horizontal coordinate of the object.
-   * @param mouseY - Vertical coordinate of the object.
-   */
-  void AddObject(int mouseX, int mouseY);
-
-  /**
    * State's background music.
    */
   Music music;
@@ -43,9 +35,10 @@ class State {
   /**
    * Array of objects contained in this state.
    */
-  std::vector<std::unique_ptr<GameObject>> objectArray;
+  std::vector<std::shared_ptr<GameObject>> objectArray;
   GameObject* tileMap;
   GameObject* bg;
+  bool started;
 
  public:
 
@@ -77,6 +70,9 @@ class State {
    * Function that gathers Sprite's renderings and takes them to Game.
    */
   void Render();
+  void Start();
+  std::weak_ptr<GameObject> AddObject(GameObject* go);
+  std::weak_ptr<GameObject> GetObjectPtr(GameObject* go);
 
 };
 #endif /* STATE_H */
