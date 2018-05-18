@@ -37,14 +37,14 @@ Game::Game(std::string title, int width, int height) {
     exit(EXIT_FAILURE);
   }
 
-  if (Mix_Init(MIX_INIT_FLAC | MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD) == 0) {
-    SDL_Log("Unable to initialize MIX: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
-
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT,
                     MIX_DEFAULT_CHANNELS, 1024) != 0) {
     SDL_Log("Unable to initialize OpenAudio: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
+
+  if (Mix_Init(MIX_INIT_FLAC | MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD) == 0) {
+    SDL_Log("Unable to initialize MIX: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
