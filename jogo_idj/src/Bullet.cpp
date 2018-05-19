@@ -9,26 +9,36 @@
 #include "Bullet.h"
 
 #include "Sprite.h"
+#include "Collider.h"
 
 
 Bullet::Bullet(GameObject& associated,
+               Sprite* sprite,
+               std::string owner,
                float maxDistance,
                float angle,
                float speed,
-               int damage,
-               std::string sprite)
+               int damage)
        : Component(associated) {
 
+  Bullet::owner = owner;
   Bullet::speed = Vec2(speed*Vec2::Cos(angle), speed*Vec2::Sin(angle));
   Bullet::damage = damage;
   distanceLeft = maxDistance;
   associated.rotation = angle;
 
-  associated.AddComponent(new Sprite(associated, sprite, 3, 0.33));
+  associated.AddComponent(sprite);
+  associated.AddComponent(new Collider(associated));
 
 }
 
 Bullet::~Bullet() {
+
+}
+
+bool Bullet::IsOwner(std::string owner) {
+
+  return (Bullet::owner == owner);
 
 }
 

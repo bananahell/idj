@@ -30,8 +30,12 @@ class Rect {
    */
   bool Contains(float xCoord, float yCoord);
   Vec2 GetPos();
-	Vec2 GetCenter();
-	void SetPos(Vec2 pos);
+  Vec2 GetCenter();
+  void SetCenter(int x, int y);
+  void SetPos(Vec2 pos);
+  void SetSize(Vec2 size);
+  Vec2 GetSize();
+  void SetCenter(Vec2 center);
 
   /**
    * Horizontal coordinate of the left-top most point of the rectangle.

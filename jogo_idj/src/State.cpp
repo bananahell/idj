@@ -11,7 +11,10 @@
 
 #include "State.h"
 
+#include "PenguinBody.h"
+#include "Collision.h"
 #include "Alien.h"
+#include "Collider.h"
 #include "Camera.h"
 #include "CameraFollower.h"
 #include "InputManager.h"
@@ -48,6 +51,11 @@ State::State() : music(Music()) {
   go->box.y = 300 - go->box.h/2;
   AddObject(go);
 
+  go = new GameObject();
+  go->AddComponent(new PenguinBody(*go));
+  go->box.SetCenter(704, 640);
+  AddObject(go);
+
   State::quitRequested = false;
 
 }
@@ -77,6 +85,21 @@ void State::Update(float dt) {
     if (State::objectArray.at(i)->IsDead()) {
       Camera::Unfollow();
       State::objectArray.erase(State::objectArray.begin() + i);
+    }
+  }
+
+  for (unsigned i = 0; i < objectArray.size(); i++) {
+    for (unsigned j = i+1; j < objectArray.size(); j++) {
+      if (objectArray[i]->IsActive() && objectArray[j]->IsActive()) {
+        Collider* objA = (Collider*) objectArray[i]->GetComponent("Collider");
+        Collider* objB = (Collider*) objectArray[j]->GetComponent("Collider");
+        if (objA && objB) {
+          if (Collision::IsColliding(objA->box, objB->box, objA->rotation, objB->rotation)) {
+            objectArray[i]->NotifyCollision(*objectArray[j]);
+            objectArray[j]->NotifyCollision(*objectArray[i]);
+          }
+        }
+      }
     }
   }
 
@@ -124,7 +147,7 @@ std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
 void State::Start() {
 
   State::LoadAssets();
-  for (int i = 0; i < State::objectArray.size(); i++) {
+  for (unsigned int i = 0; i < State::objectArray.size(); i++) {
     State::objectArray[i]->Start();
   }
   State::started = true;
@@ -133,7 +156,7 @@ void State::Start() {
 
 std::weak_ptr<GameObject> State::GetObjectPtr(GameObject* go) {
 
-  for (int i = 0; i < State::objectArray.size(); i++) {
+  for (unsigned int i = 0; i < State::objectArray.size(); i++) {
     if (State::objectArray[i].get() == go) {
       return State::objectArray[i];
     }

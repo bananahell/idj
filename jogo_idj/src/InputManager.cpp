@@ -41,6 +41,12 @@ InputManager::~InputManager() {
 
 }
 
+Vec2 InputManager::GetMousePos() {
+
+  return Vec2(mouseX, mouseY);
+
+}
+
 void InputManager::Update() {
 
   InputManager::quitRequested = false;

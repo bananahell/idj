@@ -56,6 +56,8 @@ class Component {
    */
   virtual bool Is(std::string type) = 0;
   virtual void Start();
+  virtual void NotifyCollision(GameObject& other);
+	virtual bool IsActive();
 
  protected:
 
@@ -63,6 +65,7 @@ class Component {
    * Game object to which this component is associated.
    */
   GameObject& associated;
+	bool active;
 
 };
 #endif /* COMPONENT_H */

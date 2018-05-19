@@ -23,11 +23,15 @@ Sprite::Sprite(GameObject& associated) : Component(associated) {
 Sprite::Sprite(GameObject& associated,
                std::string file,
                int frameCount,
-               float frameTime)
-        : Sprite(associated) {
+               float frameTime,
+               bool loop,
+               float secondsToSelfDestruct)
+       : Sprite(associated) {
 
   Sprite::frameCount = frameCount;
   Sprite::frameTime = frameTime;
+  Sprite::loop = loop;
+  Sprite::secondsToSelfDestruct = secondsToSelfDestruct;
   Open(file);
 
 }
@@ -102,7 +106,7 @@ void Sprite::Render(float x, float y) {
 
 int Sprite::GetWidth() {
 
-  return Sprite::width;
+  return (int)(width/frameCount) * scale.x;
 
 }
 
@@ -123,6 +127,22 @@ bool Sprite::IsOpen() {
 
 void Sprite::Update(float dt) {
 
+  timeElapsed += dt;
+  if (secondsToSelfDestruct > 0) {
+    selfDestructCount.Update(dt);
+    if (selfDestructCount.Get() > secondsToSelfDestruct)
+      associated.RequestDelete();
+  }
+  if (timeElapsed > frameTime) {
+    timeElapsed -= frameTime;
+    if (currentFrame < frameCount-1) {
+      currentFrame += 1;
+    }
+    else if (loop) {
+      currentFrame = 0;
+    }
+    SetClip(currentFrame*(width/frameCount), 0, (width/frameCount), height);
+  }
 
 }
 
@@ -140,5 +160,23 @@ void Sprite::SetScale(Vec2 scale) {
   Sprite::scale = scale;
   associated.box.w = GetWidth();
   associated.box.h = GetHeight();
+
+}
+
+void Sprite::SetFrame(int frame) {
+
+  currentFrame = frame;
+
+}
+
+void Sprite::SetFrameCount(int frameCount) {
+
+  Sprite::frameCount = frameCount;
+
+}
+
+void Sprite::SetFrameTime(float frameTime) {
+
+  Sprite::frameTime = frameTime;
 
 }

@@ -43,6 +43,7 @@ class GameObject {
    * @param dt - Unused yet.
    */
   void Update(float dt);
+	void AddComponentAsFirst(Component* cpt);
   /**
    * Function called in State's Render to Render the components in the object.
    */
@@ -80,13 +81,15 @@ class GameObject {
    */
   Component* GetComponent(std::string type);
   void Start();
+  void NotifyCollision(GameObject& other);
+  bool IsActive();
 
   /**
    * Box in which the object is inserted in the game, with information like x
    * and y positions and width and height.
    */
   Rect box;
-	float rotation;
+  float rotation;
 
  private:
 
@@ -99,6 +102,7 @@ class GameObject {
    */
   bool isDead;
   bool started;
+  bool isActive;
 
 };
 #endif /* GAMEOBJECT_H */

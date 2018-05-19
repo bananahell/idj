@@ -34,7 +34,9 @@ void Minion::Shoot(Vec2 pos) {
   float distance = associated.box.GetCenter().GetDS(pos);
   float angle = associated.box.GetCenter().GetAngle(pos);
   GameObject* go = new GameObject();
-  go->AddComponent(new Bullet(*go, distance, angle, 600, 5, "assets/img/minionbullet2.png"));
+	Sprite* sprite = new Sprite(*go, "assets/img/minionbullet2.png", 3, 0.33, true);
+	sprite->SetScale(Vec2(2, 2));
+  go->AddComponent(new Bullet(*go, sprite, "Alien", distance, angle, 800, 1));
   go->box.SetPos(associated.box.GetCenter()-Vec2(go->box.w/2, go->box.h/2));
   Game::GetInstance().GetState().AddObject(go);
 

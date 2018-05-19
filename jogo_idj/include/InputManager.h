@@ -21,6 +21,8 @@
 #define INCLUDE_SDL
 #include "SDL_include.h"
 
+#include "Vec2.h"
+
 #include <unordered_map>
 
 
@@ -43,6 +45,7 @@ class InputManager {
   static int GetMouseY();
   static bool QuitRequested();
   static InputManager& GetInstance();
+	static Vec2 GetMousePos();
 
  private:
 

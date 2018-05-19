@@ -32,6 +32,15 @@ void GameObject::Update(float dt) {
 
 }
 
+void GameObject::AddComponentAsFirst(Component* cpt) {
+
+  components.emplace(components.begin(), cpt);
+  if (started) {
+    cpt->Start();
+  }
+
+}
+
 void GameObject::Render(Vec2 cameraPos) {
 
   for (unsigned int i = 0; i < GameObject::components.size(); i++) {
@@ -49,6 +58,12 @@ bool GameObject::IsDead() {
 void GameObject::RequestDelete() {
 
   GameObject::isDead = true;
+
+}
+
+bool GameObject::IsActive() {
+
+  return GameObject::isActive;
 
 }
 
@@ -88,9 +103,19 @@ Component* GameObject::GetComponent(std::string type) {
 
 void GameObject::Start() {
 
-  for (int i = 0; i < GameObject::components.size(); i++) {
+  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
     GameObject::components[i]->Start();
   }
   GameObject::started = true;
+
+}
+
+void GameObject::NotifyCollision(GameObject& other) {
+
+  for (unsigned i = 0; i < components.size(); i++) {
+    if (components[i]->IsActive()) {
+      components[i]->NotifyCollision(other);
+    }
+  }
 
 }

@@ -27,6 +27,26 @@ Vec2 Rect::GetPos() {
 
 }
 
+void Rect::SetCenter(Vec2 pos) {
+
+  x = pos.x-(w/2);
+  y = pos.y-(h/2);
+
+}
+
+void Rect::SetSize(Vec2 size) {
+
+  w = size.x;
+  h = size.y;
+
+}
+
+Vec2 Rect::GetSize() {
+
+  return Vec2(w, h);
+
+}
+
 Vec2 Rect::GetCenter() {
 
   return Vec2(x + (w/2), y + (h/2));
@@ -37,5 +57,12 @@ void Rect::SetPos(Vec2 pos) {
 
   x = pos.x;
   y = pos.y;
+
+}
+
+void Rect::SetCenter(int x, int y) {
+
+  Rect::x = x - Rect::w/2;
+  Rect::y = y - Rect::h/2;
 
 }

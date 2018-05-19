@@ -11,6 +11,8 @@
 
 #include "Component.h"
 
+#include "Timer.h"
+
 #include <memory>
 #include <queue>
 #include <string>
@@ -28,6 +30,8 @@ class Alien : public Component {
   void Render(Vec2 cameraPos);
   bool Is(std::string type);
 
+  static int alienCount;
+
  private:
 
   class Action {
@@ -42,6 +46,11 @@ class Alien : public Component {
 
   };
 
+  enum AlienState { RESTING, MOVING };
+  AlienState state;
+  Timer restTimer;
+  float restTime;
+  Vec2 destination;
   Vec2 speed;
   int hp;
   std::queue<Action> taskQueue;

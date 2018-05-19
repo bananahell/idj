@@ -13,6 +13,7 @@
 #include "SDL_include.h"
 
 #include "Component.h"
+#include "Timer.h"
 
 #include <string>
 
@@ -45,6 +46,9 @@ class Sprite : public Component {
   int currentFrame;
   float frameTime;
   float timeElapsed;
+  bool loop;
+  Timer selfDestructCount;
+  float secondsToSelfDestruct;
 
  public:
 
@@ -52,7 +56,12 @@ class Sprite : public Component {
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
   explicit Sprite(GameObject& associated);
-  Sprite(GameObject& associated, std::string file, int frameCount = 1, float frameTime = 1);
+  Sprite(GameObject& associated,
+         std::string file,
+         int frameCount = 1,
+         float frameTime = 1,
+         bool loop = true,
+         float secondsToSelfDesctruct = 0);
   /**
    * Sprite's destructor.
    */
@@ -106,7 +115,7 @@ class Sprite : public Component {
   /**
    * Function that is called to render the sprite in the specified position.
    *
-   * @param 
+   * @param
    */
   void Render(float x, float y);
   /**
@@ -120,7 +129,10 @@ class Sprite : public Component {
   bool Is(std::string type);
   void SetScaleX(float scaleX, float scaleY);
   Vec2 GetScale();
-	void SetScale(Vec2 scale);
+  void SetScale(Vec2 scale);
+  void SetFrame(int frame);
+  void SetFrameCount(int frameCount);
+  void SetFrameTime(float frameTime);
 
 };
 #endif /* SPRITE_H */
