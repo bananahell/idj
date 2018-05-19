@@ -27,5 +27,4 @@ class Collider : public Component {
   bool Is(std::string type);
 
 };
-
 #endif /* COLLIDER_H_ */

@@ -58,5 +58,4 @@ class Alien : public Component {
   int nMinions;
 
 };
-
 #endif /* ALIEN_H */

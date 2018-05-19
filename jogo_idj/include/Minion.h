@@ -31,5 +31,4 @@ class Minion : public Component {
   void Shoot(Vec2 target);
 
 };
-
 #endif /* MINION_H */

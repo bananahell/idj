@@ -31,5 +31,4 @@ class PenguinBody : public Component {
   Vec2 GetPlayerCenter();
 
 };
-
 #endif /* PENGUINBODY_H_ */

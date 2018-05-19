@@ -43,9 +43,9 @@ class Vec2 {
   float GetDS(Vec2 pos);
   float GetCos(Vec2 pos);
   float GetSin(Vec2 pos);
-	static float Cos(float ang);
-	static float Sin(float ang);
-	float GetAngle(Vec2 pos);
+  static float Cos(float ang);
+  static float Sin(float ang);
+  float GetAngle(Vec2 pos);
 
   /**
    * Horizontal coordinate of Vec2.

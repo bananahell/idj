@@ -45,7 +45,7 @@ class InputManager {
   static int GetMouseY();
   static bool QuitRequested();
   static InputManager& GetInstance();
-	static Vec2 GetMousePos();
+  static Vec2 GetMousePos();
 
  private:
 

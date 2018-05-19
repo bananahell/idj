@@ -39,8 +39,7 @@ class Bullet : public Component {
   void Render(Vec2 cameraPos);
   bool Is(std::string type);
   int GetDamage();
-	bool IsOwner(std::string owner);
+  bool IsOwner(std::string owner);
 
 };
-
 #endif /* BULLET_H */

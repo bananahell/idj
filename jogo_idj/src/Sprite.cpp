@@ -17,6 +17,12 @@ Sprite::Sprite(GameObject& associated) : Component(associated) {
   Sprite::texture = nullptr;
   Sprite::width = 0;
   Sprite::height = 0;
+  scale = Vec2(1, 1);
+  frameCount = 1;
+  currentFrame = 0;
+  frameTime = 1;
+  timeElapsed = 0;
+  loop = true;
 
 }
 
