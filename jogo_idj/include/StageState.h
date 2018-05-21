@@ -1,29 +1,34 @@
-#ifndef STAGESTATE_H_
-#define STAGESTATE_H_
+#ifndef STAGESTATE_H
+#define STAGESTATE_H
 
-#include "State.h"
 #include "GameObject.h"
 #include "Music.h"
+#include "State.h"
 #include "TileSet.h"
 
+
 class StageState : public State {
-private:
-	GameObject* bg;
-	GameObject* map;
-	TileSet* set;
-	Music backgroundMusic;
 
-public:
-	StageState();
-	~StageState();
-	void LoadAssets();
-	void Start();
-	void Pause();
-	void Resume();
-	void CollisionCheck();
-	void DeletionCheck();
-	void Update(float dt);
-	void Render();
+ public:
+
+  StageState();
+  ~StageState();
+
+  void LoadAssets();
+  void Start();
+  void Pause();
+  void Resume();
+  void CollisionCheck();
+  void DeletionCheck();
+  void Update(float dt);
+  void Render();
+
+ private:
+
+  GameObject* bg;
+  GameObject* map;
+  TileSet* set;
+  Music backgroundMusic;
+
 };
-
-#endif /* STAGESTATE_H_ */
+#endif /* STAGESTATE_H */

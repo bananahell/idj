@@ -1,29 +1,41 @@
 #include "Component.h"
 
+
 Component::Component(GameObject& associated) : associated(associated) {
-	active = true;
+
+  active = true;
+
 }
 
 Component::~Component() {
+
 
 }
 
 void Component::Start() {
 
+
 }
 
 void Component::NotifyCollision(GameObject& other) {
 
+
 }
 
 void Component::Activate() {
-	active = true;
+
+  active = true;
+
 }
 
 void Component::Deactivate() {
-	active = false;
+
+  active = false;
+
 }
 
 bool Component::IsActive() {
-	return active;
+
+  return active;
+
 }

@@ -1,26 +1,30 @@
-#ifndef TITLESTATE_H_
-#define TITLESTATE_H_
+#ifndef TITLESTATE_H
+#define TITLESTATE_H
 
-#include "State.h"
 #include "GameObject.h"
+#include "State.h"
 #include "Timer.h"
 
+
 class TitleState : public State {
-private:
-	GameObject* bg;
-	GameObject* txt;
-	Timer toggleText;
 
+ public:
 
-public:
-	TitleState();
-	~TitleState();
-	void LoadAssets();
-	void Start();
-	void Pause();
-	void Resume();
-	void Update(float dt);
-	void Render();
+  TitleState();
+  ~TitleState();
+
+  void LoadAssets();
+  void Start();
+  void Pause();
+  void Resume();
+  void Update(float dt);
+  void Render();
+
+ private:
+
+  GameObject* bg;
+  GameObject* txt;
+  Timer toggleText;
+
 };
-
-#endif /* TITLESTATE_H_ */
+#endif /* TITLESTATE_H */

@@ -1,86 +1,103 @@
 #include "EndState.h"
+
+#include "CameraFollower.h"
 #include "Game.h"
 #include "GameData.h"
 #include "InputManager.h"
-
-#include "StageState.h"
-
 #include "Sprite.h"
+#include "StageState.h"
 #include "Text.h"
-#include "CameraFollower.h"
+
 
 EndState::EndState() : State() {
-	bg = new GameObject();
-	txt = new GameObject();
 
-	if(GameData::playerVictory) {
-		bg->AddComponent(new Sprite(*bg, "assets/img/win.jpg"));
-		bg->AddComponent(new CameraFollower(*bg));
-		bg->box.SetSize(Vec2());
+  EndState::bg = new GameObject();
+  EndState::txt = new GameObject();
 
-		txt->AddComponent(new Text(*txt, "assets/font/Call me maybe.ttf", 72, 
-								   "PRESS SPACE TO TRY AGAIN", SDL_Color {}, Text::SOLID));
-		txt->AddComponent(new CameraFollower(*txt, Vec2(512, 500)-(txt->box.GetSize()/2)));
+  if (GameData::playerVictory) {
+    EndState::bg->AddComponent(new Sprite(*bg, "assets/img/win.jpg"));
+    EndState::bg->AddComponent(new CameraFollower(*bg));
+    EndState::bg->box.SetSize(Vec2());
 
-		backgroundMusic = Music("assets/audio/endStateWin.ogg");
-	}else{
-		bg->AddComponent(new Sprite(*bg, "assets/img/lose.jpg"));
-		bg->AddComponent(new CameraFollower(*bg));
-		bg->box.SetSize(Vec2());
+    EndState::txt->AddComponent(new Text(*txt, "assets/font/Call me maybe.ttf", 72, "PRESS SPACE TO TRY AGAIN", SDL_Color {}, Text::SOLID));
+    EndState::txt->AddComponent(new CameraFollower(*txt, Vec2(512, 500)-(EndState::txt->box.GetSize()/2)));
 
-		txt->AddComponent(new Text(*txt, "assets/font/Call me maybe.ttf", 72, 
-								   "PRESS SPACE TO TRY AGAIN", SDL_Color {255, 255, 255, 0}, Text::SOLID));
-		txt->AddComponent(new CameraFollower(*txt, Vec2(512, 100)-(txt->box.GetSize()/2)));
+    EndState::backgroundMusic = Music("assets/audio/endStateWin.ogg");
+  } else {
+    EndState::bg->AddComponent(new Sprite(*bg, "assets/img/lose.jpg"));
+    EndState::bg->AddComponent(new CameraFollower(*bg));
+    EndState::bg->box.SetSize(Vec2());
 
-		backgroundMusic = Music("assets/audio/endStateLose.ogg");
-	}
+    EndState::txt->AddComponent(new Text(*txt, "assets/font/Call me maybe.ttf", 72, "PRESS SPACE TO TRY AGAIN", SDL_Color {255, 255, 255, 0}, Text::SOLID));
+    EndState::txt->AddComponent(new CameraFollower(*txt, Vec2(512, 100)-(EndState::txt->box.GetSize()/2)));
+
+    EndState::backgroundMusic = Music("assets/audio/endStateLose.ogg");
+  }
+
 }
 
 EndState::~EndState() {
-	delete bg;
-	delete txt;
+
+  delete EndState::bg;
+  delete EndState::txt;
+
 }
 
 void EndState::LoadAssets() {
 
+
 }
 
 void EndState::Start() {
-	LoadAssets();
-	bg->Start();
-	txt->Start();
-	StartArray();
-	backgroundMusic.Play();
-	started = true;
+
+  LoadAssets();
+  EndState::bg->Start();
+  EndState::txt->Start();
+  StartArray();
+  EndState::backgroundMusic.Play();
+  EndState::started = true;
+
 }
 
 void EndState::Pause() {
+
 
 }
 
 void EndState::Resume() {
 
+
 }
 
 void EndState::Update(float dt) {
-	quitRequested = InputManager::QuitRequested();
-	if(InputManager::KeyPress(ESCAPE_KEY))
-		quitRequested = true;
 
-	if(InputManager::KeyPress(SPACE_KEY))
-		popRequested = true;
+  EndState::quitRequested = InputManager::QuitRequested();
+  if (InputManager::KeyPress(ESCAPE_KEY)) {
+    EndState::quitRequested = true;
+  }
 
-	if(bg->IsActive())
-		bg->Update(dt);
-	if(txt->IsActive())
-		txt->Update(dt);
-	UpdateArray(dt);
+  if (InputManager::KeyPress(SPACE_KEY)) {
+    EndState::popRequested = true;
+  }
+
+  if (EndState::bg->IsActive()) {
+    EndState::bg->Update(dt);
+  }
+  if (EndState::txt->IsActive()) {
+    EndState::txt->Update(dt);
+  }
+  UpdateArray(dt);
+
 }
 
 void EndState::Render() {
-	if(bg->IsActive())
-		bg->Render();
-	if(txt->IsActive())
-		txt->Render();
-	RenderArray();
+
+  if (EndState::bg->IsActive()) {
+    EndState::bg->Render();
+  }
+  if (EndState::txt->IsActive()) {
+    EndState::txt->Render();
+  }
+  RenderArray();
+
 }

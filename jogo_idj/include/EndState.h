@@ -1,25 +1,30 @@
-#ifndef ENDSTATE_H_
-#define ENDSTATE_H_
+#ifndef ENDSTATE_H
+#define ENDSTATE_H
 
-#include "State.h"
 #include "GameObject.h"
 #include "Music.h"
+#include "State.h"
+
 
 class EndState : public State {
-private:
-	GameObject* bg;
-	GameObject* txt;
-	Music backgroundMusic;
 
-public:
-	EndState();
-	~EndState();
-	void LoadAssets();
-	void Start();
-	void Pause();
-	void Resume();
-	void Update(float dt);
-	void Render();
+ public:
+
+  EndState();
+  ~EndState();
+
+  void LoadAssets();
+  void Start();
+  void Pause();
+  void Resume();
+  void Update(float dt);
+  void Render();
+
+ private:
+
+  GameObject* bg;
+  GameObject* txt;
+  Music backgroundMusic;
+
 };
-
-#endif /* ENDSTATE_H_ */
+#endif /* ENDSTATE_H */

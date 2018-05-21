@@ -1,23 +1,28 @@
-#ifndef MINION_H_
-#define MINION_H_
+#ifndef MINION_H
+#define MINION_H
 
 #include "Component.h"
 
-#include <string>
 #include <memory>
+#include <string>
+
 
 class Minion : public Component {
-private:
-	std::weak_ptr<GameObject> alienCenter;
-	float arc;
 
-public:
-	Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg);
-	~Minion();
-	void Shoot(Vec2 target);
-	void Update(float dt);
-	void Render();
-	bool Is(std::string type);
+ public:
+
+  Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg);
+  ~Minion();
+
+  void Shoot(Vec2 target);
+  void Update(float dt);
+  void Render();
+  bool Is(std::string type);
+
+ private:
+
+  std::weak_ptr<GameObject> alienCenter;
+  float arc;
+
 };
-
-#endif /* MINION_H_ */
+#endif /* MINION_H */

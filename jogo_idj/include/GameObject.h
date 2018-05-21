@@ -1,40 +1,45 @@
-#ifndef GAMEOBJECT_H_
-#define GAMEOBJECT_H_
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
 
 #include "Rect.h"
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
+
 
 class Component;
 
 class GameObject {
-private:
-	std::vector<std::unique_ptr<Component>> components;
-	bool started;
-	bool active;
-	bool isDead;
 
-public:
-	Rect box;
-	float rotation;
+ public:
 
-	GameObject();
-	~GameObject();
-	void Start();
-	void AddComponent(Component* cpt);
-	void AddComponentAsFirst(Component* cpt);
-	void RemoveComponent(Component* cpt);
-	Component* GetComponent(std::string type);
-	void RequestDelete();
-	void Update(float dt) ;
-	void Render();
-	void NotifyCollision(GameObject& other);
-	void Activate();
-	void Deactivate();
-	bool IsActive();
-	bool IsDead();
+  Rect box;
+  float rotation;
+
+  GameObject();
+  ~GameObject();
+
+  void Start();
+  void AddComponent(Component* cpt);
+  void AddComponentAsFirst(Component* cpt);
+  void RemoveComponent(Component* cpt);
+  Component* GetComponent(std::string type);
+  void RequestDelete();
+  void Update(float dt) ;
+  void Render();
+  void NotifyCollision(GameObject& other);
+  void Activate();
+  void Deactivate();
+  bool IsActive();
+  bool IsDead();
+
+ private:
+
+  std::vector<std::unique_ptr<Component>> components;
+  bool started;
+  bool active;
+  bool isDead;
+
 };
-
-#endif /* GAMEOBJECT_H_ */
+#endif /* GAMEOBJECT_H */

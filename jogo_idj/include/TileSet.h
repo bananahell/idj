@@ -1,24 +1,29 @@
-#ifndef TILESET_H_
-#define TILESET_H_
+#ifndef TILESET_H
+#define TILESET_H
 
 #include "Sprite.h"
 
 #include <string>
 
+
 class TileSet {
-private:
-	Sprite tileSet;
-	int tileWidth;
-	int tileHeight;
-	int rows;
-	int columns;
 
-public:
-	TileSet(GameObject& associated, std::string file, int tileWidth, int tileHeight);
-	~TileSet();
-	void RenderTile(int index, int x, int y);
-	int GetTileWidth();
-	int GetTileHeight();
+ public:
+
+  TileSet(GameObject& associated, std::string file, int tileWidth, int tileHeight);
+  ~TileSet();
+
+  void RenderTile(int index, int x, int y);
+  int GetTileWidth();
+  int GetTileHeight();
+
+ private:
+
+  Sprite tileSet;
+  int tileWidth;
+  int tileHeight;
+  int rows;
+  int columns;
+
 };
-
-#endif /* TILESET_H_ */
+#endif /* TILESET_H */
