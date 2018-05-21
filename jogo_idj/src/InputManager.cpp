@@ -1,15 +1,5 @@
-/**
- * @file InputManager.cpp
- *
- * Game's music manager.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
 #include "InputManager.h"
-
 #include "Camera.h"
-
 
 std::unordered_map<int, bool> InputManager::keyState;
 std::unordered_map<int, int> InputManager::keyUpdate;
@@ -20,143 +10,73 @@ int InputManager::mouseY;
 int InputManager::updateCounter;
 bool InputManager::quitRequested = false;
 
-InputManager& InputManager::GetInstance() {
-
-  static InputManager inputManager;
-  return inputManager;
-
-}
-
-InputManager::InputManager() {
-
-  InputManager::mouseX = 0;
-  InputManager::mouseY = 0;
-  InputManager::updateCounter = 0;
-  InputManager::quitRequested = false;
-
-}
-
-InputManager::~InputManager() {
-
-
-}
-
-Vec2 InputManager::GetMousePos() {
-
-  return Vec2(mouseX, mouseY);
-
-}
-
 void InputManager::Update() {
+	SDL_Event event;
+	SDL_GetMouseState(&mouseX, &mouseY);
+	mouseX += Camera::pos.x;
+	mouseY += Camera::pos.y;
+	updateCounter++;
 
-  InputManager::quitRequested = false;
-  SDL_Event event;
-  SDL_GetMouseState(&mouseX, &mouseY);
-  InputManager::mouseX += Camera::pos.x;
-  InputManager::mouseY += Camera::pos.y;
-
-  if (InputManager::updateCounter < 100) {
-    InputManager::updateCounter++;
-  } else {
-    InputManager::updateCounter = 0;
-  }
-
-  while (SDL_PollEvent(&event)) {
-    if (event.key.repeat != 1) {
-
-      if (event.type == SDL_QUIT) {
-        InputManager::quitRequested = true;
-      }
-
-      if (event.type == SDL_MOUSEBUTTONDOWN) {
-        InputManager::mouseState[event.button.button] = true;
-        InputManager::mouseUpdate[event.button.button] = InputManager::updateCounter;
-      }
-      if (event.type == SDL_MOUSEBUTTONUP) {
-        InputManager::mouseState[event.button.button] = false;
-        InputManager::mouseUpdate[event.button.button] = InputManager::updateCounter;
-      }
-
-      if (event.type == SDL_KEYDOWN) {
-        InputManager::keyState[event.key.keysym.sym] = true;
-        InputManager::keyUpdate[event.key.keysym.sym] = InputManager::updateCounter;
-      }
-      if (event.type == SDL_KEYUP) {
-        InputManager::keyState[event.key.keysym.sym] = false;
-        InputManager::keyUpdate[event.key.keysym.sym] = InputManager::updateCounter;
-      }
-
-    }
-  }
-
+	while(SDL_PollEvent(&event)) {
+		if(event.key.repeat != 1) {
+			if(event.type == SDL_QUIT)
+				quitRequested = true;
+			if(event.type == SDL_MOUSEBUTTONDOWN) {
+				mouseState[event.button.button] = true;
+				mouseUpdate[event.button.button] = updateCounter;
+			}
+			if(event.type == SDL_MOUSEBUTTONUP) {
+				mouseState[event.button.button] = false;
+				mouseUpdate[event.button.button] = updateCounter;
+			}
+			if(event.type == SDL_KEYDOWN) {
+				keyState[event.key.keysym.sym] = true;
+				keyUpdate[event.key.keysym.sym] = updateCounter;
+			}
+			if(event.type == SDL_KEYUP) {
+				keyState[event.key.keysym.sym] = false;
+				keyUpdate[event.key.keysym.sym] = updateCounter;
+			}
+		}
+	}
 }
 
 bool InputManager::KeyPress(int key) {
-
-  if (InputManager::keyUpdate[key] == InputManager::updateCounter) {
-    return InputManager::keyState[key];
-  } else {
-    return false;
-  }
-
+	return (keyUpdate[key] == updateCounter) ? (keyState[key]) : false;
 }
 
 bool InputManager::KeyRelease(int key) {
-
-  if (InputManager::keyUpdate[key] == InputManager::updateCounter) {
-    return !(InputManager::keyState[key]);
-  } else {
-    return false;
-  }
-
+	return (keyUpdate[key] == updateCounter) ? (!keyState[key]) : false;
 }
 
 bool InputManager::IsKeyDown(int key) {
-
-  return InputManager::keyState[key];
-
+	return keyState[key];
 }
 
 bool InputManager::MousePress(int button) {
-
-  if (InputManager::mouseUpdate[button] == InputManager::updateCounter) {
-    return InputManager::mouseState[button];
-  } else {
-    return false;
-  }
-
+	return (mouseUpdate[button] == updateCounter) ? (mouseState[button]) : false;
 }
 
 bool InputManager::MouseRelease(int button) {
-
-  if (InputManager::mouseUpdate[button] == InputManager::updateCounter) {
-    return !(InputManager::mouseState[button]);
-  } else {
-    return false;
-  }
-
+	return (mouseUpdate[button] == updateCounter) ? (!mouseState[button]) : false;
 }
 
 bool InputManager::IsMouseDown(int button) {
-
-  return InputManager::mouseState[button];
-
+	return mouseState[button];
 }
 
 int InputManager::GetMouseX() {
-
-  return InputManager::mouseX;
-
+	return mouseX;
 }
 
 int InputManager::GetMouseY() {
+	return mouseY;
+}
 
-  return InputManager::mouseY;
-
+Vec2 InputManager::GetMousePos() {
+	return Vec2(mouseX, mouseY);
 }
 
 bool InputManager::QuitRequested() {
-
-  return InputManager::quitRequested;
-
+	return quitRequested;
 }

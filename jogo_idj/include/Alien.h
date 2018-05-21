@@ -1,61 +1,37 @@
-/**
- * @file Component.h
- *
- * Component's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef ALIEN_H
-#define ALIEN_H
+#ifndef ALIEN_H_
+#define ALIEN_H_
 
 #include "Component.h"
-
 #include "Timer.h"
 
-#include <memory>
-#include <queue>
 #include <string>
 #include <vector>
-
+#include <memory>
 
 class Alien : public Component {
+private:
+	int hp;
+	Vec2 speed;
+	int nMinions;
+	std::vector<std::weak_ptr<GameObject>> minionArray;
 
- public:
+	enum AlienState { RESTING, MOVING };
+	AlienState state;
+	Timer restTimer;
+	float restTime;
+	Vec2 destination;
 
-  Alien(GameObject& associated, int nMinions);
-  ~Alien();
-  void Start();
-  void Update(float dt);
-  void Render(Vec2 cameraPos);
-  bool Is(std::string type);
+public:
+	static int alienCount;
 
-  static int alienCount;
-
- private:
-
-  class Action {
-
-   public:
-
-    enum ActionType { MOVE, SHOOT };
-    ActionType type;
-    Vec2 pos;
-
-    Action(ActionType type, float x, float y);
-
-  };
-
-  enum AlienState { RESTING, MOVING };
-  AlienState state;
-  Timer restTimer;
-  float restTime;
-  Vec2 destination;
-  Vec2 speed;
-  int hp;
-  std::queue<Action> taskQueue;
-  std::vector<std::weak_ptr<GameObject>> minionArray;
-  int nMinions;
-
+	Alien(GameObject& associated, int nMinions);
+	~Alien();
+	void Start();
+	void Damage(int damage);
+	void Update(float dt);
+	void Render();
+	void NotifyCollision(GameObject& other);
+	bool Is(std::string type);
 };
-#endif /* ALIEN_H */
+
+#endif /* ALIEN_H_ */

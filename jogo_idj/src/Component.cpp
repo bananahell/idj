@@ -1,24 +1,29 @@
-/**
- * @file Component.cpp
- *
- * Parts of the game objects in the game.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
 #include "Component.h"
 
+Component::Component(GameObject& associated) : associated(associated) {
+	active = true;
+}
 
-Component::Component(GameObject& associated) : associated(associated) {}
+Component::~Component() {
 
-Component::~Component() {}
+}
 
-void Component::Start() {}
+void Component::Start() {
 
-void Component::NotifyCollision(GameObject& other) {}
+}
+
+void Component::NotifyCollision(GameObject& other) {
+
+}
+
+void Component::Activate() {
+	active = true;
+}
+
+void Component::Deactivate() {
+	active = false;
+}
 
 bool Component::IsActive() {
-
-  return active;
-
+	return active;
 }

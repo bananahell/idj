@@ -1,13 +1,5 @@
-/**
- * @file Component.h
- *
- * Component's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef BULLET_H
-#define BULLET_H
+#ifndef BULLET_H_
+#define BULLET_H_
 
 #include "Component.h"
 
@@ -15,31 +7,24 @@
 
 class Sprite;
 
-
 class Bullet : public Component {
+private:
+	std::string owner;
+	Vec2 speed;
+	int damage;
+	float distanceLeft;
 
- private:
-
-  std::string owner;
-  Vec2 speed;
-  int damage;
-  float distanceLeft;
-
- public:
-
-  Bullet(GameObject& associated,
-         Sprite* sprite,
-         std::string owner,
-         float maxDistance,
-         float angle,
-         float speed,
-         int damage);
-  ~Bullet();
-  void Update(float dt);
-  void Render(Vec2 cameraPos);
-  bool Is(std::string type);
-  int GetDamage();
-  bool IsOwner(std::string owner);
+public:
+	Bullet(GameObject& associated, Sprite* sprite, std::string owner, 
+		   float maxDistance, float angle, float speed, int damage);
+	~Bullet();
+	void Update(float dt);
+	void Render();
+	void NotifyCollision(GameObject& other);
+	bool Is(std::string type);
+	bool IsOwner(std::string owner);
+	int GetDamage();
 
 };
-#endif /* BULLET_H */
+
+#endif /* BULLET_H_ */

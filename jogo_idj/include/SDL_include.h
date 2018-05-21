@@ -1,9 +1,7 @@
-
 /* - Como usar esse arquivo:
  *
- * Onde quiser adicionar, por exemplo, SDL_image e SDL_mixer em um arquivo,
- * faça o seguinte e ele incluirá elas automaticamente e de forma
- * multiplataforma (se usar o makefile tbm fornecido).
+ * Onde quiser adicionar, por exemplo, SDL_image e SDL_mixer em um arquivo, faça o seguinte e
+ * ele incluirá elas automaticamente e de forma multiplataforma (se usar o makefile tbm fornecido).
  *
  * #define INCLUDE_SDL_IMAGE
  * #define INCLUDE_SDL_MIXER

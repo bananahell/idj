@@ -1,105 +1,123 @@
-/**
- * @file Resources.cpp
- *
- * Game's resources' manager. They load and destroy image and sound resources.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
 #include "Resources.h"
-
 #include "Game.h"
 
+std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> Resources::imageTable;
+std::unordered_map<std::string, std::shared_ptr<Mix_Music>> Resources::musicTable;
+std::unordered_map<std::string, std::shared_ptr<Mix_Chunk>> Resources::soundTable;
+std::unordered_map<std::string, std::shared_ptr<TTF_Font>> Resources::fontTable;
 
-std::unordered_map<std::string, SDL_Texture*> Resources::imageTable;
-std::unordered_map<std::string, Mix_Music*> Resources::musicTable;
-std::unordered_map<std::string, Mix_Chunk*> Resources::soundTable;
-
-SDL_Texture* Resources::GetImage(std::string file) {
-
-  /* Looks for the requested image. */
-  std::unordered_map<std::string, SDL_Texture*>::const_iterator foundIt =
-                                            Resources::imageTable.find(file);
-
-  /* If found, return it, if not, create it. */
-  if (foundIt != Resources::imageTable.end()) {
-    return foundIt->second;
-  } else {
-    SDL_Texture* sdlTexture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), file.c_str());
-    Resources::imageTable.insert({file, sdlTexture});
-    return sdlTexture;
-  }
-
+std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
+	if(!imageTable.count(file)) {
+		SDL_Texture* texture = IMG_LoadTexture(Game::GetInstance().GetRenderer(), file.c_str());
+		imageTable.emplace(file, std::shared_ptr<SDL_Texture>(texture, [](SDL_Texture* p) { SDL_DestroyTexture(p); }));
+	}
+	if(!imageTable.at(file)) {
+		printf("IMG_LoadTexture failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	return imageTable.at(file);
 }
 
 void Resources::ClearImages() {
 
-  /* Clearing each of the allocated images. */
-  for (auto& image: Resources::imageTable) {
-    SDL_DestroyTexture(image.second);
-  }
-  Resources::imageTable.clear();
+	imageTable.clear();
 
 }
 
-Mix_Music* Resources::GetMusic(std::string file) {
-
-  /* Looks for the requested music. */
-  std::unordered_map<std::string, Mix_Music*>::const_iterator foundIt =
-                                            Resources::musicTable.find(file);
-
-  /* If found, return it, if not, create it. */
-  if (foundIt != Resources::musicTable.end()) {
-    return foundIt->second;
-  } else {
-    Mix_Music* mixMusic = Mix_LoadMUS(file.c_str());
-    if (mixMusic == nullptr) {
-      SDL_Log("Unable to load music Mix_LoadMUS: %s", SDL_GetError());
-      exit(EXIT_FAILURE);
-    }
-    Resources::musicTable.insert({file, mixMusic});
-    return mixMusic;
-  }
-
+std::shared_ptr<Mix_Music> Resources::GetMusic(std::string file) {
+	if(!musicTable.count(file)) {
+		Mix_Music* music = Mix_LoadMUS(file.c_str());
+		musicTable.emplace(file, std::shared_ptr<Mix_Music>(music, [](Mix_Music* p) { Mix_FreeMusic(p); }));
+	}
+	if(musicTable.at(file) == nullptr) {
+		printf("Mix_LoadMUS failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	return musicTable.at(file);
 }
 
 void Resources::ClearMusics() {
 
-  /* Clearing each of the allocated musics. */
-  for (auto& music: Resources::musicTable) {
-    Mix_FreeMusic(music.second);
-  }
-  Resources::musicTable.clear();
+	musicTable.clear();
 
 }
 
-Mix_Chunk* Resources::GetSound(std::string file) {
-
-  /* Looks for the requested sound. */
-  std::unordered_map<std::string, Mix_Chunk*>::const_iterator foundIt =
-                                            Resources::soundTable.find(file);
-
-  /* If found, return it, if not, create it. */
-  if (foundIt != Resources::soundTable.end()) {
-    return foundIt->second;
-  } else {
-    Mix_Chunk* mixChunk = Mix_LoadWAV(file.c_str());
-    if (mixChunk == nullptr) {
-      SDL_Log("Unable to open sound Mix_LoadWAV: %s", SDL_GetError());
-      exit(EXIT_FAILURE);
-    }
-    Resources::soundTable.insert({file, mixChunk});
-    return mixChunk;
-  }
-
+std::shared_ptr<Mix_Chunk> Resources::GetSound(std::string file) {
+	if(!soundTable.count(file)) {
+		Mix_Chunk* chunk = Mix_LoadWAV(file.c_str());
+		soundTable.emplace(file, std::shared_ptr<Mix_Chunk>(chunk, [](Mix_Chunk* p) { Mix_FreeChunk(p); }));
+	}
+	if(soundTable.at(file) == nullptr) {
+		printf("Mix_LoadWAV failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	return soundTable.at(file);
 }
 
 void Resources::ClearSounds() {
+	for(auto& i: soundTable)
+		if(i.second.unique())
+			soundTable.erase(i.first);
+}
 
-  /* Clearing each of the allocated images. */
-  for (auto& sound: Resources::soundTable) {
-    Mix_FreeChunk(sound.second);
-  }
-  Resources::soundTable.clear();
+std::shared_ptr<TTF_Font> Resources::GetFont(std::string fontFile, int fontSize) {
+	char size[3];
+	sprintf(size, "%d", fontSize);
+	std::string key = fontFile+size;
+	if(!fontTable.count(key)) {
+		TTF_Font* font = TTF_OpenFont(fontFile.c_str(), fontSize);
+		fontTable.emplace(key, std::shared_ptr<TTF_Font>(font, [](TTF_Font* p) { TTF_CloseFont(p); }));
+	}
+	if(fontTable.at(key) == nullptr) {
+		printf("TTF_OpenFont failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	return fontTable.at(key);
+}
 
+void Resources::ClearFonts() {
+	for(auto& i: fontTable)
+		if(i.second.unique())
+			fontTable.erase(i.first);
+}
+
+void Resources::Clear() {
+	ClearFonts();
+	ClearSounds();
+	ClearMusics();
+	ClearImages();
+}
+
+void Resources::CleanUp() {
+#ifdef DEBUG
+	for(auto& i: fontTable) {
+		printf("Deleting: ");
+		printf(i.first.c_str());
+		fontTable.erase(i.first);
+		printf(" - done\n");
+	}
+	for(auto& i: soundTable) {
+		printf("Deleting: ");
+		printf(i.first.c_str());
+		soundTable.erase(i.first);
+		printf(" - done\n");
+	}
+	for(auto& i: musicTable) {
+		printf("Deleting: ");
+		printf(i.first.c_str());
+		musicTable.erase(i.first);
+		printf(" - done\n");
+	}
+	for(auto& i: imageTable) {
+		printf("Deleting: ");
+		printf(i.first.c_str());
+		imageTable.erase(i.first);
+		printf(" - done\n");
+	}
+#else
+	fontTable.clear();
+	soundTable.clear();
+	musicTable.clear();
+	imageTable.clear();
+#endif // DEBUG
 }

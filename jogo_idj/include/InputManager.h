@@ -1,13 +1,5 @@
-/**
- * @file InputManager.h
- *
- * InputManager's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#ifndef INPUTMANAGER_H_
+#define INPUTMANAGER_H_
 
 #define LEFT_ARROW_KEY SDLK_LEFT
 #define RIGHT_ARROW_KEY SDLK_RIGHT
@@ -25,41 +17,29 @@
 
 #include <unordered_map>
 
-
-/**
- * InputManager class. Class that holds the tile set clipped from an image to be
- * shown in a tile map.
- */
 class InputManager {
+private:
+	static std::unordered_map<int, bool> keyState;
+	static std::unordered_map<int, int> keyUpdate;
+	static bool mouseState [6];
+	static int mouseUpdate [6];
+	static int mouseX;
+	static int mouseY;
+	static int updateCounter;
+	static bool quitRequested;
 
- public:
-
-  static void Update();
-  static bool KeyPress(int key);
-  static bool KeyRelease(int key);
-  static bool IsKeyDown(int key);
-  static bool MousePress(int button);
-  static bool MouseRelease(int button);
-  static bool IsMouseDown(int button);
-  static int GetMouseX();
-  static int GetMouseY();
-  static bool QuitRequested();
-  static InputManager& GetInstance();
-  static Vec2 GetMousePos();
-
- private:
-
-  InputManager();
-  ~InputManager();
-
-  static bool mouseState[6];
-  static int mouseUpdate[6];
-  static std::unordered_map<int, bool> keyState;
-  static std::unordered_map<int, int> keyUpdate;
-  static bool quitRequested;
-  static int updateCounter;
-  static int mouseX;
-  static int mouseY;
-
+public:
+	static void Update();
+	static bool KeyPress(int key);
+	static bool KeyRelease(int key);
+	static bool IsKeyDown(int key);
+	static bool MousePress(int button);
+	static bool MouseRelease(int button);
+	static bool IsMouseDown(int button);
+	static int GetMouseX();
+	static int GetMouseY();
+	static Vec2 GetMousePos();
+	static bool QuitRequested();
 };
-#endif /* INPUTMANAGER_H */
+
+#endif /* INPUTMANAGER_H_ */

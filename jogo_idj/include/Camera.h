@@ -1,36 +1,20 @@
-/**
- * @file Camera.h
- *
- * Camera's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CAMERA_H_
+#define CAMERA_H_
 
 #include "GameObject.h"
-#include "Vec2.h"
 
-
-/**
- * Camera class. Class that holds the tile set clipped from an image to be
- * shown in a tile map.
- */
 class Camera {
+private:
+	static	GameObject* focus;
 
- public:
+public:
+	static Vec2 pos;
+	static Vec2 speed;
 
-  static void Follow(GameObject* newFocus);
-  static void Unfollow();
-  static void Update(float dt);
-
-  static Vec2 pos;
-  static Vec2 speed;
-
- private:
-
-  static GameObject* focus;
-
+	static void Follow(GameObject* newFocus);
+	static void Unfollow();
+	static void Update(float dt);
+	static GameObject* GetFocus();
 };
-#endif /* CAMERA_H */
+
+#endif /* CAMERA_H_ */

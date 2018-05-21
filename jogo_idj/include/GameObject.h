@@ -1,108 +1,40 @@
-/**
- * @file GameObject.h
- *
- * GameObject's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef GAMEOBJECT_H_
+#define GAMEOBJECT_H_
 
 #include "Rect.h"
-#include "Vec2.h"
 
-#include <memory>
 #include <string>
 #include <vector>
+#include <memory>
 
-/* Forward declaration to use Component. Way of dodging circular dependency. */
 class Component;
 
-
-/**
- * GameObject class. The class that represents an object in the game, holding
- * each of its characteristics, which are called components.
- */
 class GameObject {
+private:
+	std::vector<std::unique_ptr<Component>> components;
+	bool started;
+	bool active;
+	bool isDead;
 
- public:
+public:
+	Rect box;
+	float rotation;
 
-  /**
-   * GameObject's constructor. Makes sure the object is alive.
-   */
-  GameObject();
-  /**
-   * GameObject's destructor. Clears the whole vector of components.
-   */
-  ~GameObject();
-
-  /**
-   * Function called in State's Update to Update the components in the object.
-   *
-   * @param dt - Unused yet.
-   */
-  void Update(float dt);
+	GameObject();
+	~GameObject();
+	void Start();
+	void AddComponent(Component* cpt);
 	void AddComponentAsFirst(Component* cpt);
-  /**
-   * Function called in State's Render to Render the components in the object.
-   */
-  void Render(Vec2 cameraPos);
-  /**
-   * Public function used to check if the game object is dead, which means that
-   * its Face's hitpoints have reached zero or less.
-   *
-   * @return True if the game object is dead (Face::hitpoints <= 0).
-   */
-  bool IsDead();
-  /**
-   * Function that sets the object's death to true.
-   */
-  void RequestDelete();
-  /**
-   * Function used to add components to the object.
-   *
-   * @param cpt - Component to be added itself.
-   */
-  void AddComponent(Component* cpt);
-  /**
-   * Function used to remove components from the object.
-   *
-   * @param cpt - Component to be removed itself.
-   */
-  void RemoveComponent(Component* cpt);
-  /**
-   * Function used to look for an object's component by type.
-   *
-   * @param type - The type being looked for.
-   *
-   * @return Component The component with the matching type passed as parameter,
-   * <code>nullptr</code> if not found.
-   */
-  Component* GetComponent(std::string type);
-  void Start();
-  void NotifyCollision(GameObject& other);
-  bool IsActive();
-
-  /**
-   * Box in which the object is inserted in the game, with information like x
-   * and y positions and width and height.
-   */
-  Rect box;
-  float rotation;
-
- private:
-
-  /**
-   * Vector of unique pointers used to hold the object's components.
-   */
-  std::vector<std::unique_ptr<Component>> components;
-  /**
-   * Variable that determines if the object is alive or not.
-   */
-  bool isDead;
-  bool started;
-  bool isActive;
-
+	void RemoveComponent(Component* cpt);
+	Component* GetComponent(std::string type);
+	void RequestDelete();
+	void Update(float dt) ;
+	void Render();
+	void NotifyCollision(GameObject& other);
+	void Activate();
+	void Deactivate();
+	bool IsActive();
+	bool IsDead();
 };
-#endif /* GAMEOBJECT_H */
+
+#endif /* GAMEOBJECT_H_ */

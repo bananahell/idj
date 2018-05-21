@@ -1,155 +1,149 @@
-/**
- * @file Game.cpp
- * 
- * Game's basic engine functions.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_MIXER
+#define INCLUDE_SDL_IMAGE
+#define INCLUDE_SDL_TTF
 
 #include "Game.h"
-
-#include "InputManager.h"
 #include "Resources.h"
+#include "InputManager.h"
+#include "Camera.h"
 
+#include <stdlib.h>
+#include <time.h>
 
-Game* Game::instance = nullptr;
+Game* Game::instance;
+std::stack<std::unique_ptr<State>> Game::stateStack;
+State* Game::storedState;
 
 Game::Game(std::string title, int width, int height) {
+	if(instance) {
+		printf("Multiple Instances\n");
+		exit(EXIT_FAILURE);
+	}else{
+		instance = this;
+	}
 
-  /* Needed for singleton use of instance. */
-  if (Game::instance != nullptr) {
-    exit(EXIT_FAILURE);
-  }
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
+		printf("SDL_Init failed\n");
+		exit(EXIT_FAILURE);
+	}
 
-  Game::instance = this;
+	if(!IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF)) {
+		printf("IMG_Init failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-  /* Initialization of basic SDL functionalities. */
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
-    SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+	if(!Mix_Init(MIX_INIT_OGG)) {
+		printf("Mix_Init failed: %s\n", SDL_GetError());
+	}
 
-  if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF) == 0) {
-    SDL_Log("Unable to initialize IMG: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024)) {
+		printf("Mix_OpenAudio failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT,
-                    MIX_DEFAULT_CHANNELS, 1024) != 0) {
-    SDL_Log("Unable to initialize OpenAudio: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+	Mix_AllocateChannels(32);
 
-  if (Mix_Init(MIX_INIT_FLAC | MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD) == 0) {
-    SDL_Log("Unable to initialize MIX: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+	if(TTF_Init()) {
+		printf("TTF_Init failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-  Mix_AllocateChannels(32);
+	window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
+	if(!window) {
+		printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-  /* Window and renderer creation. */
-  Game::window = SDL_CreateWindow(title.c_str(),
-                                  SDL_WINDOWPOS_CENTERED,
-                                  SDL_WINDOWPOS_CENTERED,
-                                  width, height,
-                                  0);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if(!renderer) {
+		printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 
-  if (Game::window == nullptr) {
-    SDL_Log("Unable to initialize window: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+	//printf((!storedState) ? "OFF\n" : "ON\n");
+	//printf("&%p\n", storedState);
+	//printf((stateStack.empty()) ? "EMPTY\n" : "POPULATED\n");
 
-  Game::renderer = SDL_CreateRenderer(Game::window,
-                                      -1,
-                                      SDL_RENDERER_ACCELERATED |
-                                      SDL_RENDERER_TARGETTEXTURE |
-                                      SDL_RENDERER_PRESENTVSYNC/* |
-                                      SDL_RENDERER_SOFTWARE*/);
-
-  if (Game::renderer == nullptr) {
-    SDL_Log("Unable to initialize renderer: %s", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
-
-  /* Game's State creation. */
-  Game::state = new State();
-
+	srand(time(NULL));
 }
 
 Game::~Game() {
-
-  delete Game::state;
-
-  /* Clearing every resource before quitting. */
-  Resources::ClearImages();
-  Resources::ClearMusics();
-  Resources::ClearSounds();
-
-  Mix_CloseAudio();
-  Mix_Quit();
-  IMG_Quit();
-  SDL_DestroyWindow(Game::window);
-  SDL_DestroyRenderer(Game::renderer);
-  SDL_Quit();
-
-}
-
-void Game::Run() {
-
-  Game::state->Start();
-  /* Load assets before the game's loop. */
-  Game::GetInstance().state->LoadAssets();
-
-  /* Execute game's loop with its functionalities. */
-  while (Game::state->QuitRequested() == false) {
-    CalculateDeltaTime();
-    InputManager::GetInstance().Update();
-    if (SDL_RenderClear(Game::renderer) != 0) {
-      SDL_Log("Unable to clear renderer: %s", SDL_GetError());
-      exit(EXIT_FAILURE);
-    }
-    Game::GetInstance().state->Update(GetDeltaTime());
-    Game::GetInstance().state->Render();
-    SDL_RenderPresent(Game::GetInstance().renderer);
-    SDL_Delay(33);
-  }
-
-}
-
-SDL_Renderer* Game::GetRenderer() {
-
-  return Game::renderer;
-
-}
-
-State& Game::GetState() {
-
-  return *state;
-
-}
-
-Game& Game::GetInstance() {
-
-  /* Singleton instance. */
-  if (Game::instance == nullptr) {
-    Game::instance = new Game("Pedro Nogueira - 14/0065032", 1024, 600);
-  }
-  return *instance;
-
+	if(storedState)
+		delete storedState;
+	while(!stateStack.empty())
+		stateStack.pop();
+	Resources::CleanUp();
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	TTF_Quit();
+	Mix_CloseAudio();
+	Mix_Quit();
+	IMG_Quit();
+	SDL_Quit();
+	printf("We have cleaned it all up now, you can go already.");
 }
 
 void Game::CalculateDeltaTime() {
-
-  Game::dt = SDL_GetTicks() - Game::frameStart;
-  Game::frameStart = Game::frameStart + Game::dt;
-
+	dt = SDL_GetTicks() - frameStart;
+	frameStart = frameStart + dt;
 }
 
 float Game::GetDeltaTime() {
+	return dt/1000;
+}
 
-  return Game::dt/1000;
+Game& Game::GetInstance() {
+	if(!instance) {
+		new Game("Pedro Henriques Nogueira - 140065032", 1024, 600);
+	}
+	return *instance;
+}
 
+SDL_Renderer* Game::GetRenderer() {
+	return renderer;
+}
+
+State& Game::GetCurrentState() {
+	return *stateStack.top().get();
+}
+
+void Game::Push(State* state) {
+	storedState = state;
+}
+
+void Game::Run() {
+	if(storedState) {
+		stateStack.emplace(storedState);
+		stateStack.top()->Start();
+		storedState = nullptr;
+	}
+	if(!stateStack.empty()) {
+		while(!stateStack.top()->QuitRequested()) {
+			while(!storedState && !stateStack.top()->PopRequested() && !stateStack.top()->QuitRequested()) {
+				if(SDL_RenderClear(renderer))
+					printf("SDL_RenderClear failed: %s\n", SDL_GetError());
+				CalculateDeltaTime();
+				Camera::Update(GetDeltaTime());
+				InputManager::Update();
+				stateStack.top()->Update(GetDeltaTime());
+				stateStack.top()->Render();
+				SDL_RenderPresent(renderer);
+				SDL_Delay(33);
+			}
+			if(storedState) {
+				stateStack.top()->Pause();
+				stateStack.emplace(storedState);
+				stateStack.top()->Start();
+				storedState = nullptr;
+			}
+			else if(stateStack.top()->PopRequested()) {
+				stateStack.pop();
+				Resources::Clear();
+				if(!stateStack.empty()) {
+					stateStack.top()->Resume();
+				}
+			}
+		}
+	}
+	printf("Game Over.\n");
 }

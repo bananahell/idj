@@ -1,34 +1,23 @@
-/**
- * @file Component.h
- *
- * Component's functions' declarations.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
-#ifndef MINION_H
-#define MINION_H
+#ifndef MINION_H_
+#define MINION_H_
 
 #include "Component.h"
 
-#include <memory>
 #include <string>
-
+#include <memory>
 
 class Minion : public Component {
+private:
+	std::weak_ptr<GameObject> alienCenter;
+	float arc;
 
- private:
-
-  std::weak_ptr<GameObject> alienCenter;
-  float arc;
-
- public:
-
-  Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg);
-  void Update(float dt);
-  void Render(Vec2 cameraPos);
-  bool Is(std::string type);
-  void Shoot(Vec2 target);
-
+public:
+	Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg);
+	~Minion();
+	void Shoot(Vec2 target);
+	void Update(float dt);
+	void Render();
+	bool Is(std::string type);
 };
-#endif /* MINION_H */
+
+#endif /* MINION_H_ */

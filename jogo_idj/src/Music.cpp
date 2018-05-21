@@ -1,56 +1,42 @@
-/**
- * @file Music.cpp
- *
- * Game's music manager.
- *
- * @author Pedro Nogueira - 14/0065032
- */
-
 #include "Music.h"
-
 #include "Resources.h"
 
-
 Music::Music() {
-
-  Music::music = nullptr;
-
+	music = nullptr;
 }
 
-Music::Music(std::string file) {
-
-  Music::Open(file);
-
+Music::Music(std::string file) : Music() {
+	Open(file);
 }
 
 Music::~Music() {
-
-
-}
-
-void Music::Play(int times) {
-
-  Mix_PlayMusic(Music::music, times);
-
-}
-
-void Music::Stop(int msToStop) {
-
-  Mix_FadeOutMusic(msToStop);
-
+	if(IsPlaying())
+		Stop(0);
+	music = nullptr;
 }
 
 void Music::Open(std::string file) {
+	music = Resources::GetMusic(file);
+}
 
-  Music::music = Resources::GetMusic(file);
+void Music::Play(int times) {
+	if(Mix_PlayMusic(music.get(), times) == -1) {
+		printf("Mix_PlayedMusic failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+}
 
+void Music::Stop(int msToStop) {
+	if(!Mix_FadeOutMusic(msToStop)) {
+		printf("Mix_FadeOutMusic failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 }
 
 bool Music::IsOpen() {
+	return (!music) ? false : true;
+}
 
-  if (Music::music != nullptr) {
-    return true;
-  }
-  return false;
-
+bool Music::IsPlaying() {
+	return (Mix_PlayingMusic());
 }
