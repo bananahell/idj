@@ -1,81 +1,34 @@
+/**
+ * @file GameObject.cpp
+ *
+ * Game's objects encapsulator.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "GameObject.h"
 
 #include "Component.h"
 
 
-GameObject::GameObject() {
+GameObject::GameObject() : box (Rect()) {
 
-  started = false;
-  active = true;
-  isDead = false;
-  box = Rect();
-  rotation = 0;
+  GameObject::started = false;
+  GameObject::active = true;
+  GameObject::isDead = false;
+  GameObject::rotation = 0;
 
 }
 
 GameObject::~GameObject() {
 
-  components.clear();
-
-}
-
-void GameObject::Start() {
-
-  for (unsigned i = 0; i < components.size(); i++) {
-    components[i]->Start();
-  }
-  started = true;
-
-}
-
-void GameObject::AddComponent(Component* cpt) {
-
-  components.emplace_back(cpt);
-  if (started) {
-    cpt->Start();
-  }
-
-}
-
-void GameObject::AddComponentAsFirst(Component* cpt) {
-
-  components.emplace(components.begin(), cpt);
-  if (started) {
-    cpt->Start();
-  }
-
-}
-
-void GameObject::RemoveComponent(Component* cpt) {
-
-  for (int i = components.size()-1; i >= 0; i--) {
-    if (components[i].get() == cpt) {
-      components.erase(components.begin()+i);
-    }
-  }
-
-}
-
-Component* GameObject::GetComponent(std::string type) {
-
-  for (unsigned i = 0; i < components.size(); i++) {
-    if (components[i]->Is(type)) {
-      return components[i].get();
-    }
-  }
-  return nullptr;
-
-}
-
-void GameObject::RequestDelete() {
-
-  isDead = true;
+  GameObject::components.clear();
 
 }
 
 void GameObject::Update(float dt) {
 
-  for (unsigned i = 0; i < components.size(); i++) {
+  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     if (components[i]->IsActive()) {
       components[i]->Update(dt);
     }
@@ -85,19 +38,86 @@ void GameObject::Update(float dt) {
 
 void GameObject::Render() {
 
-  for (unsigned i = 0; i < components.size(); i++) {
-    if (components[i]->IsActive()) {
-      components[i]->Render();
+  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+    if (GameObject::components[i]->IsActive()) {
+      GameObject::components[i]->Render();
     }
+  }
+
+}
+
+bool GameObject::IsDead() {
+
+  return GameObject::isDead;
+
+}
+
+void GameObject::RequestDelete() {
+
+  GameObject::isDead = true;
+
+}
+
+void GameObject::AddComponent(Component* cpt) {
+
+  GameObject::components.emplace_back(cpt);
+  if (GameObject::started) {
+    cpt->Start();
+  }
+
+}
+
+void GameObject::RemoveComponent(Component* cpt) {
+
+  unsigned int position = 0;
+  bool notHere = true;
+  while (position != GameObject::components.size()) {
+    if (GameObject::components.at(position).get() == cpt) {
+      GameObject::components.erase(GameObject::components.begin() + position);
+      notHere = false;
+      break;
+    }
+  }
+
+  if (notHere) {
+  }
+
+}
+
+Component* GameObject::GetComponent(std::string type) {
+
+  for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
+    if (GameObject::components.at(i)->Is(type)) {
+      return GameObject::components.at(i).get();
+    }
+  }
+  return nullptr;
+
+}
+
+void GameObject::Start() {
+
+  for (unsigned int i = 0; i < GameObject::components.size(); i++) {
+    GameObject::components[i]->Start();
+  }
+  GameObject::started = true;
+
+}
+
+void GameObject::AddComponentAsFirst(Component* cpt) {
+
+  GameObject::components.emplace(GameObject::components.begin(), cpt);
+  if (GameObject::started) {
+    cpt->Start();
   }
 
 }
 
 void GameObject::NotifyCollision(GameObject& other) {
 
-  for (unsigned i = 0; i < components.size(); i++) {
-    if (components[i]->IsActive()) {
-      components[i]->NotifyCollision(other);
+  for (unsigned int i = 0; i < components.size(); i++) {
+    if (GameObject::components[i]->IsActive()) {
+      GameObject::components[i]->NotifyCollision(other);
     }
   }
 
@@ -105,24 +125,18 @@ void GameObject::NotifyCollision(GameObject& other) {
 
 void GameObject::Activate() {
 
-  active = true;
+  GameObject::active = true;
 
 }
 
 void GameObject::Deactivate() {
 
-  active = false;
+  GameObject::active = false;
 
 }
 
 bool GameObject::IsActive() {
 
-  return active;
-
-}
-
-bool GameObject::IsDead() {
-
-  return isDead;
+  return GameObject::active;
 
 }

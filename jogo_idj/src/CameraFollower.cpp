@@ -1,22 +1,18 @@
+/**
+ * @file CameraFollower.cpp
+ *
+ * Mechanics component of a game's object.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "CameraFollower.h"
 
 #include "Camera.h"
 
 
-CameraFollower::CameraFollower(GameObject& associated, Vec2 truePos) : Component(associated) {
+CameraFollower::CameraFollower(GameObject& associated, Vec2 truePos) : Component(associated), truePos(truePos) {
 
-  CameraFollower::truePos = truePos;
-
-}
-
-CameraFollower::~CameraFollower() {
-
-
-}
-
-void CameraFollower::SetTruePos(Vec2 pos) {
-
-  CameraFollower::truePos = pos;
 
 }
 
@@ -37,5 +33,16 @@ bool CameraFollower::Is(std::string type) {
     return true;
   }
   return false;
+
+}
+
+CameraFollower::~CameraFollower() {
+
+
+}
+
+void CameraFollower::SetTruePos(Vec2 pos) {
+
+  CameraFollower::truePos = pos;
 
 }

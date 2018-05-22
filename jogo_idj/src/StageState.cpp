@@ -26,7 +26,7 @@ StageState::StageState() : State(), backgroundMusic("assets/audio/stageState.ogg
   StageState::bg->AddComponent(new CameraFollower(*bg));
   StageState::bg->box.SetSize(Vec2());
 
-  StageState::map->AddComponent(new TileMap(*map, StageState::set, "assets/map/tileMap.txt"));
+  StageState::map->AddComponent(new TileMap(*map, "assets/map/tileMap.txt", StageState::set));
   StageState::map->box = Rect();
 
   for (int i = 0; i < 3; i++) {

@@ -1,3 +1,11 @@
+/**
+ * @file State.cpp
+ *
+ * Game's logic coordinator.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "State.h"
 
 

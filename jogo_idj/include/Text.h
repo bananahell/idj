@@ -17,7 +17,7 @@ class Text : public Component {
 
   enum TextStyle {SOLID, SHADED, BLENDED};
 
-  Text(GameObject& associated);
+  explicit Text(GameObject& associated);
   Text(GameObject& associated, std::string fontFile, int fontSize, std::string text, SDL_Color color, TextStyle style);
   ~Text();
 

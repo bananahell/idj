@@ -1,9 +1,21 @@
-#ifndef RECT_H_
-#define RECT_H_
+/**
+ * @file Rect.h
+ *
+ * Rect's functions' declarations.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
+#ifndef RECT_H
+#define RECT_H
 
 #include "Vec2.h"
 
 
+/**
+ * Rect class. Class containing information needed to place a game object in the
+ * game's window, like coordinates and size.
+ */
 class Rect {
 
  public:
@@ -24,9 +36,21 @@ class Rect {
   Vec2 GetSize();
   Vec2 GetCenter();
 
+  /**
+   * Horizontal coordinate of the left-top most point of the rectangle.
+   */
   float x;
+  /**
+   * Vertical coordinate of the left-top most point of the rectangle.
+   */
   float y;
+  /**
+   * Rectangle's width.
+   */
   float w;
+  /**
+   * Rectangle's height.
+   */
   float h;
 
 };

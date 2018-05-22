@@ -1,9 +1,17 @@
+/**
+ * @file Component.cpp
+ *
+ * Parts of the game objects in the game.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "Component.h"
 
 
 Component::Component(GameObject& associated) : associated(associated) {
 
-  active = true;
+  Component::active = true;
 
 }
 
@@ -24,18 +32,18 @@ void Component::NotifyCollision(GameObject& other) {
 
 void Component::Activate() {
 
-  active = true;
+  Component::active = true;
 
 }
 
 void Component::Deactivate() {
 
-  active = false;
+  Component::active = false;
 
 }
 
 bool Component::IsActive() {
 
-  return active;
+  return Component::active;
 
 }

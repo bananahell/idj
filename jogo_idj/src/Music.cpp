@@ -1,26 +1,51 @@
+/**
+ * @file Music.cpp
+ *
+ * Game's music manager.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "Music.h"
 
 #include "Resources.h"
 
 
-Music::Music() {
+Music::Music() : music(nullptr) {
 
-  music = nullptr;
 
 }
 
 Music::Music(std::string file) : Music() {
 
-  Open(file);
+  Music::Open(file);
 
 }
 
 Music::~Music() {
 
-  if (IsPlaying()) {
-    Stop(0);
+  if (Music::IsPlaying()) {
+    Music::Stop(0);
   }
-  music = nullptr;
+  Music::music = nullptr;
+
+}
+
+void Music::Play(int times) {
+
+  if (Mix_PlayMusic(music.get(), times) == -1) {
+    SDL_Log("Unable to play music: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
+
+}
+
+void Music::Stop(int msToStop) {
+
+  if (!Mix_FadeOutMusic(msToStop)) {
+    SDL_Log("Unable to stop music: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
 }
 
@@ -30,27 +55,12 @@ void Music::Open(std::string file) {
 
 }
 
-void Music::Play(int times) {
-
-  if (Mix_PlayMusic(music.get(), times) == -1) {
-    printf("Mix_PlayedMusic failed: %s\n", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
-
-}
-
-void Music::Stop(int msToStop) {
-
-  if (!Mix_FadeOutMusic(msToStop)) {
-    printf("Mix_FadeOutMusic failed: %s\n", SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
-
-}
-
 bool Music::IsOpen() {
 
-  return (!music) ? false : true;
+  if (Music::music != nullptr) {
+    return true;
+  }
+  return false;
 
 }
 

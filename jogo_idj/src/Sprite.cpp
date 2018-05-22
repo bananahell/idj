@@ -1,3 +1,11 @@
+/**
+ * @file Sprite.cpp
+ *
+ * Game's images and sprites manager.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "Sprite.h"
 
 #include "Camera.h"
@@ -5,12 +13,11 @@
 #include "Resources.h"
 
 
-Sprite::Sprite(GameObject& associated) : Component(associated) {
+Sprite::Sprite(GameObject& associated) : Component(associated), texture(nullptr), scale(Vec2(1, 1)) {
 
-  Sprite::texture = nullptr;
+  Sprite::secondsToSelfDestruct = 0;
   Sprite::width = 0;
   Sprite::height = 0;
-  Sprite::scale = Vec2(1, 1);
   Sprite::frameCount = 1;
   Sprite::currentFrame = 0;
   Sprite::frameTime = 1;
@@ -25,7 +32,7 @@ Sprite::Sprite(GameObject& associated, std::string file, int frameCount, float f
   Sprite::frameTime = frameTime;
   Sprite::loop = loop;
   Sprite::secondsToSelfDestruct = secondsToSelfDestruct;
-  Open(file);
+  Sprite::Open(file);
 
 }
 
@@ -39,7 +46,7 @@ void Sprite::Open(std::string file) {
 
   Sprite::texture = Resources::GetImage(file);
   SDL_QueryTexture(texture.get(), nullptr, nullptr, &width, &height);
-  SetClip(0, 0, (width/frameCount), height);
+  SetClip(0, 0, (Sprite::width/Sprite::frameCount), Sprite::height);
   Sprite::associated.box.w = GetWidth();
   Sprite::associated.box.h = GetHeight();
 
@@ -114,6 +121,8 @@ void Sprite::Render(int x, int y) {
   dstRect.y = y;
   dstRect.w = (int)clipRect.w*scale.x;
   dstRect.h = (int)clipRect.h*scale.y;
+
+  /* Rendering texture into Game's renderer. */
   SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), Sprite::texture.get(), &clipRect, &dstRect, Sprite::associated.rotation, nullptr, SDL_FLIP_NONE);
 
 }
@@ -129,7 +138,7 @@ bool Sprite::Is(std::string type) {
 
 int Sprite::GetWidth() {
 
-  return (int)(Sprite::width/Sprite::frameCount)*Sprite::scale.x;
+  return (int)(Sprite::width/Sprite::frameCount) * Sprite::scale.x;
 
 }
 
@@ -141,7 +150,7 @@ int Sprite::GetHeight() {
 
 Vec2 Sprite::GetScale() {
 
-  return scale;
+  return Sprite::scale;
 
 }
 

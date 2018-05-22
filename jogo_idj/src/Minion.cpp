@@ -9,9 +9,8 @@
 #include <time.h>
 
 
-Minion::Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg) : Component(associated) {
+Minion::Minion(GameObject& associated, GameObject& alienCenter, float arcOffsetDeg) : Component(associated), alienCenter(Game::GetInstance().GetCurrentState().GetObjectPtr(&alienCenter)) {
 
-  Minion::alienCenter = Game::GetInstance().GetCurrentState().GetObjectPtr(&alienCenter);
   arc = arcOffsetDeg;
 
   Sprite* sp = new Sprite(associated, "assets/img/minion.png");

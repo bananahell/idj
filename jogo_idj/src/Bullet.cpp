@@ -6,10 +6,8 @@
 #include "Sprite.h"
 
 
-Bullet::Bullet(GameObject& associated, Sprite* sprite, std::string owner, float maxDistance, float angle, float speed, int damage) : Component(associated) {
+Bullet::Bullet(GameObject& associated, Sprite* sprite, std::string owner, float maxDistance, float angle, float speed, int damage) : Component(associated), owner(owner), speed(Vec2(speed * Vec2::Cos(angle), speed * Vec2::Sin(angle))) {
 
-  Bullet::owner = owner;
-  Bullet::speed = Vec2(speed*Vec2::Cos(angle), speed*Vec2::Sin(angle));
   Bullet::damage = damage;
   distanceLeft = maxDistance;
   associated.rotation = angle;
@@ -27,9 +25,9 @@ Bullet::~Bullet() {
 void Bullet::Update(float dt) {
 
   if (distanceLeft > 0) {
-    associated.box.x += speed.x*dt;
-    associated.box.y += speed.y*dt;
-    distanceLeft -= Vec2().GetDS(Vec2(speed.x*dt, speed.y*dt));
+    associated.box.x += speed.x * dt;
+    associated.box.y += speed.y * dt;
+    distanceLeft -= Vec2().GetDS(Vec2(speed.x * dt, speed.y * dt));
   } else {
     associated.RequestDelete();
   }
@@ -41,10 +39,10 @@ void Bullet::Render() {
 
 }
 
-void Bullet::NotifyCollision(GameObject& other) {
+void Bullet::NotifyCollision(GameObject& otherObject) {
 
-  if (!other.GetComponent("Bullet")) {
-    if (!other.GetComponent(owner)) {
+  if (!otherObject.GetComponent("Bullet")) {
+    if (!otherObject.GetComponent(owner)) {
       associated.RequestDelete();
       GameObject* go = new GameObject();
       Sprite* sprite = new Sprite(*go, "assets/img/penguindeath.png", 5, 0.15, false, 0.75);
@@ -69,7 +67,10 @@ bool Bullet::Is(std::string type) {
 
 bool Bullet::IsOwner(std::string owner) {
 
-  return (Bullet::owner == owner);
+  if (Bullet::owner == owner) {
+    return true;
+  }
+  return false;
 
 }
 

@@ -1,3 +1,11 @@
+/**
+ * @file InputManager.h
+ *
+ * InputManager's functions' declarations.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
 
@@ -18,6 +26,10 @@
 #include <unordered_map>
 
 
+/**
+ * InputManager class. Class that holds the tile set clipped from an image to be
+ * shown in a tile map.
+ */
 class InputManager {
 
  public:
@@ -31,19 +43,19 @@ class InputManager {
   static bool IsMouseDown(int button);
   static int GetMouseX();
   static int GetMouseY();
-  static Vec2 GetMousePos();
   static bool QuitRequested();
+  static Vec2 GetMousePos();
 
  private:
 
-  static std::unordered_map<int, bool> keyState;
-  static std::unordered_map<int, int> keyUpdate;
   static bool mouseState [6];
   static int mouseUpdate [6];
+  static std::unordered_map<int, bool> keyState;
+  static std::unordered_map<int, int> keyUpdate;
+  static bool quitRequested;
+  static int updateCounter;
   static int mouseX;
   static int mouseY;
-  static int updateCounter;
-  static bool quitRequested;
 
 };
 #endif /* INPUTMANAGER_H */

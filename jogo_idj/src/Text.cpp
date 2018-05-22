@@ -5,13 +5,10 @@
 #include "Resources.h"
 
 
-Text::Text(GameObject& associated) : Component(associated) {
+Text::Text(GameObject& associated) : Component(associated), font(nullptr), fontFile(""), text("") {
 
   Text::texture = nullptr;
-  Text::font = nullptr;
-  Text::fontFile = "";
   Text::fontSize = 0;
-  Text::text = "";
   Text::color = SDL_Color {};
   Text::style = SOLID;
 
@@ -58,7 +55,7 @@ void Text::RemakeTexture() {
   SDL_FreeSurface(surface);
 
   if (!IsOpen()) {
-    printf("IMG_LoadTexture failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to load texture: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
@@ -117,29 +114,6 @@ void Text::Update(float dt) {
 
 void Text::Render() {
 
-#ifdef DEBUG
-  Rect box(associated.box);
-  Vec2 center(box.GetCenter());
-  float rotation = associated.rotation;
-  SDL_Point points[5];
-
-  Vec2 point;
-  point = (Vec2(box.x, box.y)-center).Rotate(rotation)+center-Camera::pos;
-  points[0] = {(int)point.x, (int)point.y};
-  points[4] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(box.x+box.w, box.y)-center).Rotate(rotation)+center-Camera::pos;
-  points[1] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(box.x+box.w, box.y+box.h)-center).Rotate(rotation)+center-Camera::pos;
-  points[2] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(box.x, box.y+box.h)-center).Rotate(rotation)+center-Camera::pos;
-  points[3] = {(int)point.x, (int)point.y};
-
-  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 0, 255, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
-#endif // DEBUG
   SDL_Rect clipRect = SDL_Rect {0, 0, (int)associated.box.w, (int)associated.box.h};
   SDL_Rect dstRect = clipRect;
   dstRect.x = (int)associated.box.x-Camera::pos.x;

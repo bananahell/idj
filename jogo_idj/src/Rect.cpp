@@ -66,9 +66,15 @@ void Rect::SetCenter(Vec2 pos) {
 
 }
 
-bool Rect::Contains(float a, float b) {
+bool Rect::Contains(float xCoord, float yCoord) {
 
-  return((a > x) && (a < x+w) && (b > y) && (b < y+h));
+  if (xCoord >= Rect::x &&
+      yCoord >= Rect::y &&
+      xCoord <= Rect::x + Rect::w &&
+      yCoord <= Rect::y + Rect::h) {
+    return true;
+  }
+  return false;
 
 }
 

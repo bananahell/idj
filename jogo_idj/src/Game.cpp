@@ -1,3 +1,11 @@
+/**
+ * @file Game.cpp
+ *
+ * Game's basic engine functions.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #define INCLUDE_SDL_MIXER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL_TTF
@@ -18,48 +26,54 @@ State* Game::storedState;
 
 Game::Game(std::string title, int width, int height) {
 
-  if (Game::instance) {
-    printf("Multiple Instances\n");
-    exit(EXIT_FAILURE);
-  } else {
-    Game::instance = this;
-  }
-
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
-    printf("SDL_Init failed\n");
+  /* Needed for singleton use of instance. */
+  if (Game::instance != nullptr) {
     exit(EXIT_FAILURE);
   }
 
-  if (!IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF)) {
-    printf("IMG_Init failed: %s\n", SDL_GetError());
+  Game::instance = this;
+
+  /* Initialization of basic SDL functionalities. */
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
+    SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
-  if (!Mix_Init(MIX_INIT_OGG)) {
-    printf("Mix_Init failed: %s\n", SDL_GetError());
+  if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF) == 0) {
+    SDL_Log("Unable to initialize IMG: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
   }
 
-  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024)) {
-    printf("Mix_OpenAudio failed: %s\n", SDL_GetError());
+  if (Mix_Init(MIX_INIT_OGG) == 0) {
+    SDL_Log("Unable to initialize MIX: %s", SDL_GetError());
+  }
+
+  if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) != 0) {
+    SDL_Log("Unable to initialize OpenAudio: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
   Mix_AllocateChannels(32);
 
   if (TTF_Init()) {
-    printf("TTF_Init failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to initialize TTF: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
+  /* Window and renderer creation. */
   Game::window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
-  if (!window) {
-    printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
+  if (Game::window == nullptr) {
+    SDL_Log("Unable to initialize window: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
-  Game::renderer = SDL_CreateRenderer(Game::window, -1, SDL_RENDERER_ACCELERATED);
-  if(!(Game::renderer)) {
-    printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+  Game::renderer = SDL_CreateRenderer(Game::window,
+                                      -1,
+                                      SDL_RENDERER_ACCELERATED |
+                                      SDL_RENDERER_TARGETTEXTURE |
+                                      SDL_RENDERER_PRESENTVSYNC);
+  if (Game::renderer == nullptr) {
+    SDL_Log("Unable to initialize renderer: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
@@ -93,46 +107,6 @@ Game::~Game() {
 
 }
 
-void Game::CalculateDeltaTime() {
-
-  Game::dt = SDL_GetTicks() - Game::frameStart;
-  Game::frameStart = Game::frameStart + Game::dt;
-
-}
-
-float Game::GetDeltaTime() {
-
-  return Game::dt/1000;
-
-}
-
-Game& Game::GetInstance() {
-
-  if(!(Game::instance)) {
-    new Game("Pedro Henriques Nogueira - 140065032", 1024, 600);
-  }
-  return *instance;
-
-}
-
-SDL_Renderer* Game::GetRenderer() {
-
-  return Game::renderer;
-
-}
-
-State& Game::GetCurrentState() {
-
-  return *stateStack.top().get();
-
-}
-
-void Game::Push(State* state) {
-
-  Game::storedState = state;
-
-}
-
 void Game::Run() {
 
   if (Game::storedState) {
@@ -141,10 +115,11 @@ void Game::Run() {
     Game::storedState = nullptr;
   }
   if (!(Game::stateStack.empty())) {
+    /* Execute game's loop with its functionalities. */
     while (!stateStack.top()->QuitRequested()) {
       while (!(Game::storedState) && !(Game::stateStack.top()->PopRequested()) && !(Game::stateStack.top()->QuitRequested())) {
         if (SDL_RenderClear(Game::renderer)) {
-          printf("SDL_RenderClear failed: %s\n", SDL_GetError());
+          SDL_Log("Unable to clear renderer: %s", SDL_GetError());
         }
         CalculateDeltaTime();
         Camera::Update(GetDeltaTime());
@@ -167,5 +142,46 @@ void Game::Run() {
       }
     }
   }
+
+}
+
+SDL_Renderer* Game::GetRenderer() {
+
+  return Game::renderer;
+
+}
+
+Game& Game::GetInstance() {
+
+  /* Singleton instance. */
+  if (Game::instance == nullptr) {
+    Game::instance = new Game("Pedro Nogueira - 14/0065032", 1024, 600);
+  }
+  return *instance;
+
+}
+
+void Game::CalculateDeltaTime() {
+
+  Game::dt = SDL_GetTicks() - Game::frameStart;
+  Game::frameStart = Game::frameStart + Game::dt;
+
+}
+
+float Game::GetDeltaTime() {
+
+  return Game::dt/1000;
+
+}
+
+State& Game::GetCurrentState() {
+
+  return *stateStack.top().get();
+
+}
+
+void Game::Push(State* state) {
+
+  Game::storedState = state;
 
 }

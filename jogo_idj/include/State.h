@@ -1,3 +1,11 @@
+/**
+ * @file State.h
+ *
+ * State's functions' declarations.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #ifndef STATE_H
 #define STATE_H
 
@@ -7,6 +15,10 @@
 #include <vector>
 
 
+/**
+ * State class. The class in which the game manifests its current behavior, like
+ * which music it's playing or if it wants to quit.
+ */
 class State {
 
  public:

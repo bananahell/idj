@@ -4,10 +4,8 @@
 #include "Game.h"
 
 
-Collider::Collider(GameObject& associated, Vec2 scale, Vec2 offset) : Component(associated) {
+Collider::Collider(GameObject& associated, Vec2 scale, Vec2 offset) : Component(associated), rotation(0), scale(scale), offset(offset) {
 
-  Collider::scale = scale;
-  Collider::offset = offset;
 
 }
 
@@ -46,13 +44,13 @@ void Collider::Render() {
   point = (Vec2(box.x, box.y)-center).Rotate(rotation)+center-Camera::pos;
   points[0] = {(int)point.x, (int)point.y};
   points[4] = {(int)point.x, (int)point.y};
-  
+
   point = (Vec2(box.x+box.w, box.y)-center).Rotate(rotation)+center-Camera::pos;
   points[1] = {(int)point.x, (int)point.y};
-  
+
   point = (Vec2(box.x+box.w, box.y+box.h)-center).Rotate(rotation)+center-Camera::pos;
   points[2] = {(int)point.x, (int)point.y};
-  
+
   point = (Vec2(box.x, box.y+box.h)-center).Rotate(rotation)+center-Camera::pos;
   points[3] = {(int)point.x, (int)point.y};
 

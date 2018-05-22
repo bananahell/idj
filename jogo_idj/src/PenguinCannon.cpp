@@ -6,11 +6,9 @@
 #include "Sprite.h"
 
 
-PenguinCannon::PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> penguinBody) : Component(associated) {
+PenguinCannon::PenguinCannon(GameObject& associated, std::weak_ptr<GameObject> penguinBody) : Component(associated), cooldown(Timer()), pbody(penguinBody) {
 
   angle = 0;
-  cooldown = Timer();
-  pbody = penguinBody;
 
   associated.AddComponent(new Sprite(associated, "assets/img/cubngun.png"));
 

@@ -1,3 +1,11 @@
+/**
+ * @file Resources.cpp
+ *
+ * Game's resources' manager. They load and destroy image and sound resources.
+ *
+ * @author Pedro Nogueira - 14/0065032
+ */
+
 #include "Resources.h"
 
 #include "Game.h"
@@ -15,7 +23,7 @@ std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
     Resources::imageTable.emplace(file, std::shared_ptr<SDL_Texture>(texture, [](SDL_Texture* p) { SDL_DestroyTexture(p); }));
   }
   if (!Resources::imageTable.at(file)) {
-    printf("IMG_LoadTexture failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to load texture: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
   return Resources::imageTable.at(file);
@@ -24,6 +32,7 @@ std::shared_ptr<SDL_Texture> Resources::GetImage(std::string file) {
 
 void Resources::ClearImages() {
 
+  /* Clearing each of the allocated images. */
   Resources::imageTable.clear();
 
 }
@@ -35,7 +44,7 @@ std::shared_ptr<Mix_Music> Resources::GetMusic(std::string file) {
     Resources::musicTable.emplace(file, std::shared_ptr<Mix_Music>(music, [](Mix_Music* p) { Mix_FreeMusic(p); }));
   }
   if (Resources::musicTable.at(file) == nullptr) {
-    printf("Mix_LoadMUS failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to load music: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
   return Resources::musicTable.at(file);
@@ -44,6 +53,7 @@ std::shared_ptr<Mix_Music> Resources::GetMusic(std::string file) {
 
 void Resources::ClearMusics() {
 
+  /* Clearing each of the allocated musics. */
   Resources::musicTable.clear();
 
 }
@@ -55,7 +65,7 @@ std::shared_ptr<Mix_Chunk> Resources::GetSound(std::string file) {
     Resources::soundTable.emplace(file, std::shared_ptr<Mix_Chunk>(chunk, [](Mix_Chunk* p) { Mix_FreeChunk(p); }));
   }
   if (Resources::soundTable.at(file) == nullptr) {
-    printf("Mix_LoadWAV failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to load sound: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
   return Resources::soundTable.at(file);
@@ -64,6 +74,7 @@ std::shared_ptr<Mix_Chunk> Resources::GetSound(std::string file) {
 
 void Resources::ClearSounds() {
 
+  /* Clearing each of the allocated sounds. */
   Resources::soundTable.clear();
 
 }
@@ -78,7 +89,7 @@ std::shared_ptr<TTF_Font> Resources::GetFont(std::string fontFile, int fontSize)
     fontTable.emplace(key, std::shared_ptr<TTF_Font>(font, [](TTF_Font* p) { TTF_CloseFont(p); }));
   }
   if (Resources::fontTable.at(key) == nullptr) {
-    printf("TTF_OpenFont failed: %s\n", SDL_GetError());
+    SDL_Log("Unable to load ttf: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
   return Resources::fontTable.at(key);
@@ -87,6 +98,7 @@ std::shared_ptr<TTF_Font> Resources::GetFont(std::string fontFile, int fontSize)
 
 void Resources::ClearFonts() {
 
+  /* Clearing each of the allocated fonts. */
   Resources::fontTable.clear();
 
 }
