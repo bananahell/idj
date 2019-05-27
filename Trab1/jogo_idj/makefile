@@ -17,7 +17,7 @@ LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 INC_PATHS = -I$(INC_PATH) $(addprefix -I,$(SDL_INC_PATH))
 
 ##### Compile directives
-FLAGS = -std=c++11 -Wall -pedantic -Wextra -Werror=init-self
+FLAGS = -std=c++11 -Wall -pedantic -Wextra -Werror=init-self -g
 ##### Extra debugging directives
 DFLAGS = -ggdb -O0 -DDEBUG
 ##### Extra release directives
@@ -36,7 +36,7 @@ DEP_FILES = $(addprefix $(DEP_PATH)/,$(addsuffix .d,$(FILE_NAMES)))
 OBJ_FILES = $(addprefix $(BIN_PATH)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 ##### Executable name
-EXEC = 140065032_T1
+EXEC = LUCITYDOSCARAI
 
 ###################################
 ##### Windows Makefile for SDL2 use
@@ -104,7 +104,7 @@ clean:
 
 ##### Call for cppcheck
 cppcheck:
-	cppcheck --enable=all . -I./include --suppress=missingIncludeSystem
+	cppcheck --enable=all ./src/* --suppress=missingIncludeSystem
 
 ##### Call for valgrind coverage
 valgrind:
@@ -144,6 +144,10 @@ endif
 ifeq ($(OS), Windows_NT)
 	@echo.
 endif
+
+##### Call for execution of the project
+execute:
+	./$(EXEC)
 
 .SECONDEXPANSION:
 -include $$(DEP_FILES)
