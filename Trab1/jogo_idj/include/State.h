@@ -1,6 +1,6 @@
 /**
  * @file State.h
- * 
+ *
  * State's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -9,18 +9,15 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "Sprite.h"
 #include "Music.h"
-
+#include "Sprite.h"
 
 /**
  * State class. The class in which the game manifests its current behavior, like
  which music it's playing or if it wants to quit.
  */
 class State {
-
  private:
-
   /**
    * State's background image/texture.
    */
@@ -35,7 +32,6 @@ class State {
   bool quitRequested;
 
  public:
-
   /**
    * State's constructor. Sets its content, like background image and music.
    */
@@ -55,11 +51,10 @@ class State {
    * Function that determines the behavior of the game when something happens,
    like when the player inserts an input.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function that gathers Sprite's renderings and takes them to Game.
    */
   void Render();
-
 };
 #endif /* STATE_H */

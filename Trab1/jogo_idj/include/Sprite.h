@@ -1,6 +1,6 @@
 /**
  * @file Sprite.h
- * 
+ *
  * Sprite's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -14,14 +14,11 @@
 
 #include <string>
 
-
 /**
  * Sprite class. The class responsible for the game's textures and images.
  */
 class Sprite {
-
  private:
-
   /**
    * Image/texture to be displayed.
    */
@@ -40,7 +37,6 @@ class Sprite {
   SDL_Rect clipRect;
 
  public:
-
   /**
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
@@ -97,6 +93,5 @@ class Sprite {
    * @return False if null.
    */
   bool IsOpen();
-
 };
 #endif /* SPRITE_H */
