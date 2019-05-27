@@ -9,21 +9,18 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "Music.h"
 #include "GameObject.h"
+#include "Music.h"
 
 #include <memory>
 #include <vector>
-
 
 /**
  * State class. The class in which the game manifests its current behavior, like
  * which music it's playing or if it wants to quit.
  */
 class State {
-
  private:
-
   /**
    * Function made to detect input from user and act accordingly.
    */
@@ -50,7 +47,6 @@ class State {
   std::vector<std::unique_ptr<GameObject>> objectArray;
 
  public:
-
   /**
    * State's constructor. Sets its content, like background image and music.
    */
@@ -74,11 +70,10 @@ class State {
    * Function that determines the behavior of the game when something happens,
    * like when the player inserts an input.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function that gathers Sprite's renderings and takes them to Game.
    */
   void Render();
-
 };
 #endif /* STATE_H */

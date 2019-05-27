@@ -11,16 +11,13 @@
 
 #include "Component.h"
 
-
 /**
  * Face class. This class represents the mechanics component of a game object
  * that identifies the game object itself as a character, in this stage of the
  * project.
  */
 class Face : public Component {
-
  public:
-
   /**
    * Face's constructor. Sets the game's object's starting health.
    */
@@ -37,7 +34,7 @@ class Face : public Component {
    *
    * @param dt - Unused yet.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function called in State's Render to Render the component.
    */
@@ -63,6 +60,5 @@ class Face : public Component {
    * Game object's remaining health.
    */
   int hitpoints;
-
 };
 #endif /* FACE_H */

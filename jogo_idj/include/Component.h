@@ -13,15 +13,12 @@
 
 #include <string>
 
-
 /**
  * Component class. Abstract class that represents the concept of a concept of
  * a game object, like a an image or a sound of a character.
  */
 class Component {
-
  public:
-
   /**
    * Component's constructor. This is what keeps the components connected.
    *
@@ -40,7 +37,7 @@ class Component {
    *
    * @param dt - Unused yet.
    */
-  virtual void Update(float dt) = 0;
+  virtual void Update() = 0;
   /**
    * Pure virtual function that is called in State's Render to Render the
    * component.
@@ -56,11 +53,9 @@ class Component {
   virtual bool Is(std::string type) = 0;
 
  protected:
-
   /**
    * Game object to which this component is associated.
    */
   GameObject& associated;
-
 };
 #endif /* COMPONENT_H */

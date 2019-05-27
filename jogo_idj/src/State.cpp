@@ -16,9 +16,7 @@
 #include "Sprite.h"
 #include "Vec2.h"
 
-
 State::State() : music(Music()) {
-
   GameObject* bg = new GameObject();
   bg->box.x = 0;
   bg->box.y = 0;
@@ -26,57 +24,41 @@ State::State() : music(Music()) {
   State::objectArray.emplace_back(bg);
 
   State::quitRequested = false;
-
 }
 
 void State::LoadAssets() {
-
   /* Music assets. */
   State::music.Open("assets/audio/stageState.ogg");
   State::music.Play();
-
 }
 
-void State::Update(float dt) {
-
+void State::Update() {
   /* Call for input detection. */
   State::Input();
   /* Call for objects' update. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
-    State::objectArray.at(i)->Update(dt);
+    State::objectArray.at(i)->Update();
   }
   /* Sweep of dead objects around the game. */
   for (int i = (int)State::objectArray.size() - 1; i >= 0; i--) {
     if (State::objectArray.at(i)->IsDead()) {
-        State::objectArray.erase(State::objectArray.begin() + i);
+      State::objectArray.erase(State::objectArray.begin() + i);
     }
   }
-
 }
 
 void State::Render() {
-
   /* Rendering background in top left corner. */
   for (unsigned int i = 0; i < State::objectArray.size(); i++) {
     State::objectArray.at(i).get()->Render();
   }
-
 }
 
-bool State::QuitRequested() {
+bool State::QuitRequested() { return State::quitRequested; }
 
-  return State::quitRequested;
-
-}
-
-State::~State() {
-
-  State::objectArray.clear();
-
-}
+State::~State() { State::objectArray.clear(); }
 
 void State::Input() {
-
   SDL_Event event;
   int mouseX, mouseY;
 
@@ -85,7 +67,6 @@ void State::Input() {
 
   /* Gets user input events and treats them. */
   while (SDL_PollEvent(&event)) {
-
     /* Quit the game. */
     if (event.type == SDL_QUIT) {
       State::quitRequested = true;
@@ -127,11 +108,9 @@ void State::Input() {
       }
     }
   }
-
 }
 
 void State::AddObject(int mouseX, int mouseY) {
-
   /* Instantiates the object. */
   GameObject* newEnemy = new GameObject();
 
@@ -152,5 +131,4 @@ void State::AddObject(int mouseX, int mouseY) {
 
   /* Placing this new object in the object vector. */
   State::objectArray.emplace_back(newEnemy);
-
 }

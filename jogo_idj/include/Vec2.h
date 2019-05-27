@@ -9,14 +9,11 @@
 #ifndef VEC2_H
 #define VEC2_H
 
-
 /**
  * Vec2 class. Class responsible for vectorized operations in the game.
  */
 class Vec2 {
-
  public:
-
   /**
    * Vec2's constructor. Sets its horizontal and vertical coordinates.
    *
@@ -44,6 +41,5 @@ class Vec2 {
    * The number pi manually declared.
    */
   const double PI = 3.141592653589793;
-
 };
 #endif /* VEC2_H */

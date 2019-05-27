@@ -18,15 +18,12 @@
 /* Forward declaration to use Component. Way of dodging circular dependency. */
 class Component;
 
-
 /**
  * GameObject class. The class that represents an object in the game, holding
  * each of its characteristics, which are called components.
  */
 class GameObject {
-
  public:
-
   /**
    * GameObject's constructor. Makes sure the object is alive.
    */
@@ -41,7 +38,7 @@ class GameObject {
    *
    * @param dt - Unused yet.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function called in State's Render to Render the components in the object.
    */
@@ -86,7 +83,6 @@ class GameObject {
   Rect box;
 
  private:
-
   /**
    * Vector of unique pointers used to hold the object's components.
    */
@@ -95,6 +91,5 @@ class GameObject {
    * Variable that determines if the object is alive or not.
    */
   bool isDead;
-
 };
 #endif /* GAMEOBJECT_H */

@@ -15,14 +15,11 @@
 
 #include "Component.h"
 
-
 /**
  * Sound class. Class that holds the sound a game's object makes.
  */
 class Sound : public Component {
-
  public:
-
   /**
    * Sound's constructor. Sets <code>nullptr</code> to it's music chunk.
    */
@@ -63,7 +60,7 @@ class Sound : public Component {
    *
    * @param dt - Unused yet.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function called in State's Render to Render the component.
    */
@@ -85,7 +82,6 @@ class Sound : public Component {
   bool GetIsPlaying();
 
  private:
-
   /**
    * Chunk of sound used in the SDL functions to play the sounds.
    */
@@ -94,6 +90,5 @@ class Sound : public Component {
    * Channel used for this sound.
    */
   int channel;
-
 };
 #endif /* SOUND_H */

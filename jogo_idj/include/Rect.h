@@ -9,15 +9,12 @@
 #ifndef RECT_H
 #define RECT_H
 
-
 /**
  * Rect class. Class containing information needed to place a game object in the
  * game's window, like coordinates and size.
  */
 class Rect {
-
  public:
-
   /**
    * Function used to find if a given point is inside this rectangle's area.
    *
@@ -44,6 +41,5 @@ class Rect {
    * Rectangle's height.
    */
   float h;
-
 };
 #endif /* RECT_H */

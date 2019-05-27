@@ -1,6 +1,6 @@
 /**
  * @file Game.cpp
- * 
+ *
  * Game's basic engine functions.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -11,11 +11,9 @@
 
 #include "Game.h"
 
-
 Game* Game::instance = nullptr;
 
 Game::Game(std::string title, int width, int height) {
-
   /* Needed for singleton use of instance. */
   if (Game::instance != nullptr) {
     exit(EXIT_FAILURE);
@@ -49,11 +47,8 @@ Game::Game(std::string title, int width, int height) {
   Mix_AllocateChannels(32);
 
   /* Window and renderer creation. */
-  Game::window = SDL_CreateWindow(title.c_str(),
-                                  SDL_WINDOWPOS_CENTERED,
-                                  SDL_WINDOWPOS_CENTERED,
-                                  width, height,
-                                  0);
+  Game::window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
+                                  SDL_WINDOWPOS_CENTERED, width, height, 0);
 
   if (Game::window == nullptr) {
     SDL_Log("Unable to initialize window: %s", SDL_GetError());
@@ -74,11 +69,9 @@ Game::Game(std::string title, int width, int height) {
 
   /* Game's State creation. */
   Game::state = new State();
-
 }
 
 Game::~Game() {
-
   delete Game::state;
 
   Mix_CloseAudio();
@@ -87,42 +80,29 @@ Game::~Game() {
   SDL_DestroyWindow(Game::window);
   SDL_DestroyRenderer(Game::renderer);
   SDL_Quit();
-
 }
 
 void Game::Run() {
-
   /* Load assets before the game's loop. */
   Game::GetInstance().state->LoadAssets();
 
   /* Execute game's loop with its functionalities. */
   while (Game::state->QuitRequested() == false) {
-    Game::GetInstance().state->Update(0);
+    Game::GetInstance().state->Update();
     Game::GetInstance().state->Render();
     SDL_RenderPresent(Game::GetInstance().renderer);
     SDL_Delay(33);
   }
-
 }
 
-SDL_Renderer* Game::GetRenderer() {
+SDL_Renderer* Game::GetRenderer() { return Game::renderer; }
 
-  return Game::renderer;
-
-}
-
-State& Game::GetState() {
-
-  return *state;
-
-}
+State& Game::GetState() { return *state; }
 
 Game& Game::GetInstance() {
-
   /* Singleton instance. */
   if (Game::instance == nullptr) {
     Game::instance = new Game("Pedro Nogueira - 14/0065032", 1024, 600);
   }
   return *instance;
-
 }

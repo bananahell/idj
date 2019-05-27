@@ -11,15 +11,11 @@
 #include "Sound.h"
 #include "Sprite.h"
 
-
 Face::Face(GameObject& associated) : Component(associated) {
-
   Face::hitpoints = 30;
-
 }
 
 void Face::Damage(int damage) {
-
   Face::hitpoints -= damage;
   /* If the game's object dies, plays death sound and hides its texture. */
   if (Face::hitpoints <= 0) {
@@ -30,37 +26,25 @@ void Face::Damage(int damage) {
       Face::associated.RemoveComponent(sprite);
     }
   }
-
 }
 
-void Face::Update(float dt) {
-
+void Face::Update() {
   /* If the game object dies and its death sound ends, delete it entirely. */
   if (Face::hitpoints <= 0) {
-    if (!(static_cast<Sound*>(Face::associated.GetComponent("Sound"))->
-                                  GetIsPlaying())) {
+    if (!(static_cast<Sound*>(Face::associated.GetComponent("Sound"))
+              ->GetIsPlaying())) {
       Face::associated.RequestDelete();
     }
   }
-
 }
 
-void Face::Render() {
-
-
-}
+void Face::Render() {}
 
 bool Face::Is(std::string type) {
-
   if (type.compare("Face") == 0) {
     return true;
   }
   return false;
-
 }
 
-bool Face::IsDead() {
-
-  return Face::hitpoints <= 0;
-
-}
+bool Face::IsDead() { return Face::hitpoints <= 0; }

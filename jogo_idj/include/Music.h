@@ -15,21 +15,17 @@
 
 #include <string>
 
-
 /**
  * Music class. The class responsible for the game's music.
  */
 class Music {
-
  private:
-
   /**
    * SDL's music type played by this class.
    */
   Mix_Music* music;
 
  public:
-
   /**
    * Music's empty constructor. Starts the member music as a
    * <code>nullptr</code>.
@@ -68,6 +64,5 @@ class Music {
    * @return False if null.
    */
   bool IsOpen();
-
 };
 #endif /* MUSIC_H */

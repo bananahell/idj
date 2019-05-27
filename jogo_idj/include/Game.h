@@ -1,6 +1,6 @@
 /**
  * @file Game.h
- * 
+ *
  * Game's functions' declarations.
  *
  * @author Pedro Nogueira - 14/0065032
@@ -16,15 +16,12 @@
 
 #include <string>
 
-
 /**
  * Game class. The class in which the game has its basic functionalities, like
  * running in a loop and making a single instance of itself.
  */
 class Game {
-
  private:
-
   /**
    * Game's unique singleton constructor. It initializes every basic SDL
    * functionality of the game, like SDL_Init.
@@ -53,7 +50,6 @@ class Game {
   State* state;
 
  public:
-
   /**
    * Game's destructor.
    */
@@ -86,6 +82,5 @@ class Game {
    * @return Game's instance.
    */
   static Game& GetInstance();
-
 };
 #endif /* GAME_H */

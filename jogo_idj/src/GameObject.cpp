@@ -10,55 +10,31 @@
 
 #include "Component.h"
 
+GameObject::GameObject() : box(Rect()) { GameObject::isDead = false; }
 
-GameObject::GameObject() : box(Rect()){
+GameObject::~GameObject() { GameObject::components.clear(); }
 
-  GameObject::isDead = false;
-
-}
-
-GameObject::~GameObject() {
-
-  GameObject::components.clear();
-
-}
-
-void GameObject::Update(float dt) {
-
+void GameObject::Update() {
   for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
-    GameObject::components.at(i)->Update(dt);
+    GameObject::components.at(i)->Update();
   }
-
 }
 
 void GameObject::Render() {
-
   for (unsigned int i = 0; i < GameObject::components.size(); i++) {
     GameObject::components.at(i)->Render();
   }
-
 }
 
-bool GameObject::IsDead() {
+bool GameObject::IsDead() { return GameObject::isDead; }
 
-  return GameObject::isDead;
-
-}
-
-void GameObject::RequestDelete() {
-
-  GameObject::isDead = true;
-
-}
+void GameObject::RequestDelete() { GameObject::isDead = true; }
 
 void GameObject::AddComponent(Component* cpt) {
-
   GameObject::components.emplace_back(cpt);
-
 }
 
 void GameObject::RemoveComponent(Component* cpt) {
-
   unsigned int position = 0;
   bool notHere = true;
   while (position != GameObject::components.size()) {
@@ -71,16 +47,13 @@ void GameObject::RemoveComponent(Component* cpt) {
 
   if (notHere) {
   }
-
 }
 
 Component* GameObject::GetComponent(std::string type) {
-
   for (int i = (int)GameObject::components.size() - 1; i >= 0; i--) {
     if (GameObject::components.at(i)->Is(type)) {
       return GameObject::components.at(i).get();
     }
   }
   return nullptr;
-
 }

@@ -16,14 +16,11 @@
 
 #include <string>
 
-
 /**
  * Sprite class. The class responsible for the game's textures and images.
  */
 class Sprite : public Component {
-
  private:
-
   /**
    * Image/texture to be displayed.
    */
@@ -42,7 +39,6 @@ class Sprite : public Component {
   SDL_Rect clipRect;
 
  public:
-
   /**
    * Sprite's empty constructor. Sets texture to <code>nullptr</code>.
    */
@@ -97,7 +93,7 @@ class Sprite : public Component {
    *
    * @param dt - Unused yet.
    */
-  void Update(float dt);
+  void Update();
   /**
    * Function called in State's Render to Render the component.
    */
@@ -111,6 +107,5 @@ class Sprite : public Component {
    * which in this case is Sprite.
    */
   bool Is(std::string type);
-
 };
 #endif /* SPRITE_H */
